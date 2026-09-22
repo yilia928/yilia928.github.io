@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS 产品功能使用与留存分析 · 王泳雯作品集</title>
+<style>
+:root{
+  --ink:#16233a; --ink2:#45526b; --ink3:#7d8899;
+  --amber:#b45309; --amber-d:#8a4106; --amber-bg:#fdf3e3;
+  --line:#e3e7ee; --bg:#f6f7f9; --card:#fff;
+  --mono:"JetBrains Mono","Cascadia Mono",Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.8}
+a{color:var(--amber);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:980px;margin:0 auto;padding:0 26px}
+.top{background:#fff;border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:54px}
+.top a.back{font-size:13.5px;color:var(--ink2)}
+.top a.back:hover{color:var(--amber);text-decoration:none}
+.hero{background:linear-gradient(160deg,#3a2408,#b45309);color:#fff;padding:56px 0 48px}
+.hero .crumb{font-size:12.5px;letter-spacing:2px;color:#f2cf9a;margin-bottom:14px}
+.hero h1{font-size:31px;line-height:1.4}
+.hero .sub{margin-top:12px;color:#f3dfc2;font-size:14.5px;max-width:780px}
+.hero .facts{display:flex;gap:30px;margin-top:26px;font-size:12.5px;color:#eccf9f;flex-wrap:wrap}
+.hero .facts b{display:block;color:#fdf6ea;font-size:17px;font-family:var(--mono)}
+.sec{padding:44px 0 6px}
+.sec h2{font-size:21px;margin-bottom:6px}
+.sec .d{color:var(--ink3);font-size:13px;margin-bottom:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 26px;margin-bottom:16px}
+.card h3{font-size:16px;margin-bottom:8px}
+.card p{color:var(--ink2);font-size:14px}
+.card p + p{margin-top:8px}
+.card b{color:var(--ink)}
+ul.tick{margin:6px 0 0 18px;color:var(--ink2);font-size:14px}
+ul.tick li{margin:7px 0}
+ul.tick b{color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;margin-top:10px}
+th{background:#f2f5fa;text-align:left;padding:8px 12px;border:1px solid var(--line);color:var(--ink2);font-weight:600;white-space:nowrap}
+td{padding:8px 12px;border:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+td:first-child{color:var(--ink)}
+/* funnel */
+.funnel{margin:14px 0}
+.fstep{display:grid;grid-template-columns:150px 1fr 190px;gap:12px;align-items:center;padding:7px 0}
+.fstep .name{font-size:13.5px;font-weight:600}
+.fstep .bar{height:26px;background:#f7ede0;border-radius:5px;position:relative;overflow:hidden}
+.fstep .bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#d99a4e,#c77b28);border-radius:5px}
+.fstep .v{font-size:12.5px;color:var(--ink2);font-family:var(--mono);text-align:right}
+.fstep .v b{color:var(--amber-d);font-size:13.5px}
+.warn{color:#c0392b;font-weight:700}
+.deliv{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.deliv a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.deliv a:hover{text-decoration:none;border-color:#e0c194;box-shadow:0 8px 20px rgba(16,32,60,.07)}
+.deliv .t{font-size:14px;font-weight:600}
+.deliv .s{font-size:12.5px;color:var(--ink3);margin-top:4px}
+.callout{background:var(--amber-bg);border:1px solid #ecd3a8;border-radius:10px;padding:14px 18px;font-size:13.5px;color:var(--ink2);margin:14px 0}
+.callout b{color:var(--amber-d)}
+.foot{margin-top:52px;border-top:1px solid var(--line);background:#fff;padding:28px 0 44px}
+.foot p{font-size:12.5px;color:var(--ink3)}
+@media (max-width:760px){.deliv{grid-template-columns:1fr}.fstep{grid-template-columns:110px 1fr 150px}.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="back" href="../index.html">← 返回作品集首页</a>
+  <a class="back" href="../assets/sql/report.html" target="_blank">直接查看完整分析报告 ↗</a>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <div class="crumb">项目三 · SQL 数据分析</div>
+  <h1>SaaS 产品功能使用与留存分析</h1>
+  <p class="sub">基于 SaaS 用户行为数据集（5,000 名注册用户 / 46,549 条行为事件），用 SQL 完成激活漏斗、功能使用频次、次月留存与流失定位四类分析，定位流失最严重的环节，并给出带依据和预期收益的产品改进建议。</p>
+  <div class="facts">
+    <span><b>43.7%</b>整体激活率</span>
+    <span><b>63.0%</b>最薄弱环节步间转化</span>
+    <span><b>2.5×</b>激活用户留存倍数</span>
+    <span><b>4 组</b>SQL 脚本可复现</span>
+  </div>
+</div></section>
+
+<div class="wrap">
+
+  <section class="sec">
+    <h2>分析链路</h2>
+    <div class="d">SQLite 建库 → 四组 SQL → 结果导出，全链路脚本化可复现（接入真实数据只需替换 users / events 两张 CSV，SQL 无需改动）。</div>
+    <div class="card">
+      <ul class="tick">
+        <li><b>00 建表装载</b>：用户维表（注册日期 / 渠道 / 套餐）+ 行为事件表（signup / login / create_project / invite_member / generate_report / export_data / dashboard_view）；</li>
+        <li><b>01 激活漏斗</b>：注册 → 首次登录 → 创建首个项目 → 邀请协作者 → 生成首份报表，按事件日期先后判定顺序；</li>
+        <li><b>02 功能使用频次</b>：总量 / 人均 / 使用深度分桶；</li>
+        <li><b>03 次月留存</b>：注册月同期群 / 分渠道 / 激活与否对比；</li>
+        <li><b>04 流失定位</b>：渠道 × 套餐的步间转化率交叉定位。</li>
+      </ul>
+      <p style="margin-top:10px">全部指标口径（含事件字典与判定规则）单独成文，先定口径再跑数——这是这份分析里我刻意保持的习惯。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>发现一：漏斗卡在「从观看到动手」的第一步</h2>
+    <div class="card">
+      <div class="funnel">
+        <div class="fstep"><span class="name">① 注册</span><div class="bar"><i style="width:100%"></i></div><span class="v">5,000 人 · <b>100%</b></span></div>
+        <div class="fstep"><span class="name">② 首次登录</span><div class="bar"><i style="width:94.8%"></i></div><span class="v">4,742 人 · 94.8%</span></div>
+        <div class="fstep"><span class="name">③ 创建首个项目</span><div class="bar"><i style="width:59.8%"></i></div><span class="v">2,989 人 · <span class="warn">步间仅 63.0%</span></span></div>
+        <div class="fstep"><span class="name">④ 邀请协作者</span><div class="bar"><i style="width:49.2%"></i></div><span class="v">2,459 人 · 步间 82.3%</span></div>
+        <div class="fstep"><span class="name">⑤ 生成首份报表</span><div class="bar"><i style="width:43.7%"></i></div><span class="v">2,186 人 · 步间 88.9%</span></div>
+      </div>
+      <p>流失最严重的环节是「首次登录 → 创建首个项目」：4,742 名登录用户中只有 2,989 人创建项目，<b>单步流失 1,753 人，占总注册用户的 35.1%</b>。后面的邀请（82.3%）和报表（88.9%）两步都健康——用户能顺利登录，却迈不过「从观看到动手」这一步，是整体激活率只有 43.7% 的主要瓶颈。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>发现二：流失集中在 SEM 渠道，是流量质量 × 引导的叠加</h2>
+    <div class="card">
+      <p>把「创建首个项目」的步间转化按渠道 × 套餐交叉切分：<b>SEM 投放渠道三个套餐全部低于 55%</b>（48.8% ~ 54.1%），而内容营销与线下活动均在 68% 以上。SEM 贡献了 27.6% 的注册量，付费流量意图偏浅，和产品核心工作流匹配度低。</p>
+      <table>
+        <tr><th>渠道 × 套餐</th><th>注册数</th><th>创建项目转化</th><th>整体激活</th></tr>
+        <tr><td>SEM 投放 · 试用版</td><td>403</td><td class="warn">48.8%</td><td>29.5%</td></tr>
+        <tr><td>SEM 投放 · 免费版</td><td>781</td><td class="warn">53.2%</td><td>32.1%</td></tr>
+        <tr><td>SEM 投放 · 专业版</td><td>196</td><td class="warn">54.1%</td><td>29.1%</td></tr>
+        <tr><td>自然流量 · 免费版</td><td>834</td><td>56.7%</td><td>39.1%</td></tr>
+        <tr><td>内容营销 · 试用版</td><td>344</td><td>69.2%</td><td>50.0%</td></tr>
+        <tr><td>线下活动 · 专业版</td><td>66</td><td>68.3%</td><td>56.1%</td></tr>
+      </table>
+      <p style="margin-top:10px">同一批用户在「登录」环节转化都在 86% 以上——说明问题不在产品不可用，而在<b>流量意图与新手引导的叠加</b>。这决定了改进方向是引导重构 + 渠道治理，而不是改功能。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>发现三：激活是留存的第一分水岭，但激活后的深度不够</h2>
+    <div class="card">
+      <ul class="tick">
+        <li>激活用户次月留存 <b>59.7%</b>，未激活用户仅 <b>23.7%</b>，相差 35.9 个百分点——把用户推进漏斗最后一格，是提升留存杠杆最大的动作；</li>
+        <li>激活用户人均 16.1 次事件，是未激活用户（4.0 次）的 4 倍，功能使用与激活强相关；</li>
+        <li>但 <b>56.4% 的激活用户-月每月只生成 1 份报表</b>，每月 7 次以上的重度使用几乎不存在——激活之后的使用深度普遍偏浅，报表还没变成周期性工作习惯；</li>
+        <li>渠道留存排序：老客推荐 49.0% &gt; 内容营销 44.6% &gt; 线下活动 41.8% &gt; 自然流量 37.2% &gt; <span class="warn">SEM 33.0%</span>，与漏斗表现相互印证。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>改进建议（每条带口径依据与预期收益）</h2>
+    <div class="card">
+      <ul class="tick">
+        <li><b>重构新手引导</b>：把「创建首个项目」做成注册后的强制主线任务，提供 2–3 个行业模板一键创建替代空白页，48 小时内用引导清单 + 邮件 / Push 召回未创建用户。<b>依据</b>：漏斗第三步流失 1,753 人；<b>预期</b>：该步转化 63% → 75%，整体激活率约 43.7% → 52%；</li>
+        <li><b>SEM 渠道独立落地页与激活路径</b>：落地页与广告承诺的场景对齐、注册后预填场景化模板，同时给 SEM 设激活率考核，必要时下调低质词组预算。<b>依据</b>：SEM 创建项目转化 48.8%~54.1%、留存 33.0% 垫底；</li>
+        <li><b>「邀请协作者」从串行阻塞改为并行增强</b>：允许跳过邀请直接生成首份报表（用模板示例数据演示核心价值），创建项目后再即时推荐邀请。<b>依据</b>：④→⑤ 的串行依赖拖慢价值到达，而激活与留存强相关；</li>
+        <li><b>激活后 7 日习惯养成</b>：首份报表后引导「定时报表 / 订阅推送」，对连续 2 周未再生成报表的激活用户用深度功能召回。<b>依据</b>：56.4% 的用户-月仅 1 份报表；</li>
+        <li><b>放大老客推荐，把「7 日激活率」设为共同北极星</b>：上线双边激励的邀请计划，按本报告口径建立周度看板。<b>依据</b>：老客推荐留存最高（49.0%）但仅占注册量 12.6%。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>交付物</h2>
+    <div class="deliv">
+      <a href="../assets/sql/report.html" target="_blank"><div class="t">完整分析报告（含图表）</div><div class="s">四组分析的可视化呈现、渠道 × 套餐明细与全部改进建议</div></a>
+      <a href="../assets/sql/metrics.html" target="_blank"><div class="t">指标口径定义文档</div><div class="s">事件字典、漏斗五步判定条件、留存同期群口径与已知限制</div></a>
+      <a href="../assets/sql/sql-analysis-kit.zip"><div class="t">完整复现包（SQL + 脚本 + 数据）</div><div class="s">5 组 SQL 脚本、Python 一键运行脚本、5,000 用户 / 46,549 事件 CSV，跑通约 30 秒</div></a>
+    </div>
+    <div class="callout"><b>边界声明：</b>数据集为模拟生成（seed 固定可复现），用于完整演示「定口径 → 建漏斗 → 定位流失 → 给建议」的分析方法；分析结论描述的是这份数据，不是某个真实产品的结论。方法与 SQL 直接可复用：接入真实数据只需替换两张 CSV。</div>
+  </section>
+
+</div>
+
+<footer class="foot"><div class="wrap">
+  <p>王泳雯 · B 端产品作品集 · <a href="../index.html">返回首页</a></p>
+</div></footer>
+
+</body>
+</html>

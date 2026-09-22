@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD · 智销云 CRM 客户与商机管理后台（V1.0）</title>
+<style>
+:root{
+  --navy:#0e1b30; --blue:#2b5cff; --blue-bg:#eef3ff; --blue-dark:#1e46c8;
+  --amber:#f59e0b; --amber-bg:#fff7e8; --green:#16a34a; --green-bg:#e9f9ef;
+  --red:#dc2626; --red-bg:#fdecec; --cyan:#0891b2; --cyan-bg:#e6f7fb;
+  --ink:#17233a; --ink-2:#44506a; --ink-3:#8a94ab; --line:#e4e8f0; --bg:#f4f6fa; --card:#fff;
+  --mono:"JetBrains Mono","Cascadia Mono",Consolas,monospace;
+  --sans:"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:13.5px;line-height:1.75;display:flex;min-height:100vh}
+/* 文档侧栏 */
+.doc-nav{width:230px;flex:none;background:var(--navy);color:#c6d2e6;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.doc-nav h4{color:#5f7398;font-size:10.5px;letter-spacing:2px;padding:14px 20px 6px}
+.doc-nav a{display:block;color:#c6d2e6;text-decoration:none;padding:6px 20px;font-size:12.5px;border-left:3px solid transparent}
+.doc-nav a:hover{background:var(--navy-2,#15243d);color:#fff}
+.doc{flex:1;max-width:960px;margin:0 auto;padding:44px 52px 100px;background:var(--card);box-shadow:0 0 30px rgba(23,35,58,.06)}
+/* 封面 */
+.cover{border-bottom:3px solid var(--navy);padding-bottom:26px;margin-bottom:34px}
+.cover .kicker{font-size:12px;letter-spacing:4px;color:var(--blue);font-weight:700;margin-bottom:8px}
+.cover h1{font-size:30px;letter-spacing:-.02em;line-height:1.25}
+.cover .ver{display:flex;gap:24px;margin-top:16px;font-size:12.5px;color:var(--ink-2);flex-wrap:wrap}
+.cover .ver b{color:var(--ink)}
+h2{font-size:20px;margin:44px 0 14px;padding-left:12px;border-left:4px solid var(--blue);letter-spacing:-.01em}
+h3{font-size:15.5px;margin:26px 0 10px;color:var(--navy)}
+p{margin:8px 0;color:var(--ink-2)}
+ul,ol{padding-left:22px;color:var(--ink-2)} li{margin:3px 0}
+b{color:var(--ink)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+th{background:#f8fafc;text-align:left;padding:9px 12px;border:1px solid var(--line);font-weight:600;color:var(--ink);white-space:nowrap}
+td{padding:8px 12px;border:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+tr:hover td{background:#fafcff}
+code,.mono{font-family:var(--mono);font-size:12px;background:#f0f2f7;padding:1px 6px;border-radius:4px;color:var(--blue-dark)}
+.note{background:var(--blue-bg);border:1px solid #c8d8ff;border-radius:8px;padding:12px 16px;margin:12px 0;font-size:12.5px;color:#1e46c8}
+.warnbox{background:var(--amber-bg);border:1px solid #f2ddb8;border-radius:8px;padding:12px 16px;margin:12px 0;font-size:12.5px;color:#92600a}
+.tag{display:inline-block;padding:0 8px;border-radius:4px;font-size:11px;font-weight:600}
+.tg{background:var(--green-bg);color:var(--green)} .ta{background:var(--amber-bg);color:#b45309} .tr{background:var(--red-bg);color:var(--red)} .tx{background:#f0f2f7;color:var(--ink-3)}
+.formula{font-family:var(--mono);background:#0e1b30;color:#dbe7ff;border-radius:8px;padding:10px 16px;font-size:12.5px;margin:8px 0;overflow-x:auto}
+.meta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 24px;font-size:12.5px;margin:10px 0}
+.meta-grid .fl{color:var(--ink-3)}
+.revision td:first-child{font-family:var(--mono)}
+@media print{.doc-nav{display:none}.doc{box-shadow:none;max-width:100%}}
+</style>
+</head>
+<body>
+
+<nav class="doc-nav">
+  <h4>文档导航</h4>
+  <a href="#c1">1 · 文档概述</a>
+  <a href="#c2">2 · 竞品逆向拆解</a>
+  <a href="#c3">3 · 业务流程与状态流转</a>
+  <a href="#c4">4 · 功能需求（FR）</a>
+  <a href="#c5">5 · 页面结构与原型说明</a>
+  <a href="#c6">6 · 数据权限设计（权限矩阵）</a>
+  <a href="#c7">7 · 客户全生命周期指标方案</a>
+  <a href="#c8">8 · 非功能性需求</a>
+  <a href="#c9">9 · 里程碑与风险</a>
+  <a href="#c10">附录 · 名词表与修订记录</a>
+</nav>
+
+<article class="doc">
+
+<div class="cover">
+  <div class="kicker">PRODUCT REQUIREMENTS DOCUMENT</div>
+  <h1>智销云 CRM · 客户与商机管理后台<br>产品需求文档（PRD）</h1>
+  <div class="ver">
+    <span>版本：<b>V1.0</b></span>
+    <span>状态：<b>评审稿</b></span>
+    <span>作者：产品团队（逆向设计项目）</span>
+    <span>日期：2026-09-17</span>
+    <span>参照对象：纷享销客 / 销售易</span>
+  </div>
+</div>
+
+<!-- ============ 1 ============ -->
+<h2 id="c1">1. 文档概述</h2>
+<h3>1.1 背景与目标</h3>
+<p>本项目以纷享销客、销售易两款主流 CRM SaaS 为参照，逆向拆解其客户管理链路，完成一套可落地的「客户与商机管理后台」设计方案。核心目标：</p>
+<ul>
+  <li>梳理<b>「线索 → 商机 → 合同 → 回款」</b>主流程与状态流转规则；</li>
+  <li>设计<b>销售 / 销售主管 / 区域总监</b>三级数据权限体系（本人 / 本团队 / 本区域）；</li>
+  <li>输出核心页面高保真原型（HTML 版，等效 Axure RP 交互稿）；</li>
+  <li>形成本标准化 PRD 文档；</li>
+  <li>建立<b>客户全生命周期指标方案</b>（线索转化率、赢单周期、跟进及时率等）。</li>
+</ul>
+<h3>1.2 目标用户与核心痛点</h3>
+<table>
+  <tr><th>角色</th><th>核心诉求</th><th>现状痛点（对标调研结论）</th></tr>
+  <tr><td><b>销售</b></td><td>少录入、多成单；客户不撞单、不流失</td><td>Excel 台账信息散、跟进靠记忆、撞单纠纷多</td></tr>
+  <tr><td><b>销售主管</b></td><td>过程可见、风险前置；公平分配线索</td><td>漏斗靠口头汇报，超期跟进无预警，折扣审批无据</td></tr>
+  <tr><td><b>区域总监</b></td><td>区域经营大盘、预测准、大额风险可控</td><td>预测靠拍脑袋，数据汇总滞后 1 周，大额合同缺终审</td></tr>
+  <tr><td><b>财务</b></td><td>回款核销自动化、账实一致</td><td>回款与合同脱节，核销靠人工对账</td></tr>
+</table>
+<h3>1.3 项目范围</h3>
+<table>
+  <tr><th>范围内（V1.0）</th><th>范围外（后续版本）</th></tr>
+  <tr><td>线索/客户/联系人/商机/报价/合同/回款全链路管理；三级数据权限；审批流（折扣、合同）；公海规则；核心指标看板</td><td>营销自动化（MTL）、客服工单、ERP 深度集成、移动端 App、AI 商机评分</td></tr>
+</table>
+
+<!-- ============ 2 ============ -->
+<h2 id="c2">2. 竞品逆向拆解</h2>
+<h3>2.1 拆解结论</h3>
+<table>
+  <tr><th>维度</th><th>纷享销客</th><th>销售易</th><th>本项目取舍</th></tr>
+  <tr><td>流程体系</td><td>连接型 CRM，微信沟通记录自动同步、外勤签到/拜访报告完善</td><td>LTC 端到端：MTL→LTO→CPQ→OTC 四环节打通</td><td>采用销售易的 <b>LTC 主干</b>，吸收纷享的<b>外勤跟进与公海机制</b></td></tr>
+  <tr><td>公海/线索池</td><td>规则丰富：超期掉落、冷却期、领取上限</td><td>偏企业自定义，配置门槛高</td><td>预置 <b>7 天/30 天掉落 + 15 天冷却</b>，规则可配</td></tr>
+  <tr><td>商机管理</td><td>阶段自定义 + 门禁校验</td><td>阶段赢单率与预测联动</td><td>阶段门禁 + <b>赢单率加权预测</b>两者都要</td></tr>
+  <tr><td>权限体系</td><td>组织树 + 数据范围（本人/团队/部门）+ 字段级</td><td>角色权限矩阵清晰，审计完善</td><td>三级角色 + 数据范围 + <b>字段级脱敏</b> + 审计日志</td></tr>
+</table>
+<h3>2.2 逆向出的关键设计原则</h3>
+<ul>
+  <li><b>先流程后功能</b>：所有页面挂接在 LTC 主流程节点上，无孤立功能；</li>
+  <li><b>录入减负</b>：查重前置、必填最小化（线索 4 字段可创建）、跟进支持语音/拍照；</li>
+  <li><b>过程数据资产化</b>：每次跟进自动沉淀时间线，主管可回放；</li>
+  <li><b>权限即数据</b>：数据范围在 SQL 层过滤（owner / team / region），而非前端隐藏。</li>
+</ul>
+
+<!-- ============ 3 ============ -->
+<h2 id="c3">3. 业务流程与状态流转</h2>
+<div class="note">本章完整图示见交付物《业务建模图集.html》（图 1 泳道流程 / 图 2 四对象状态机 / 图 3 信息架构）。此处仅摘录规则要点。</div>
+<h3>3.1 主流程</h3>
+<p><b>线索获取与查重</b> → <b>分配/领取</b> → <b>跟进验证</b> → <b>转化（客户+商机）</b> → <b>商机阶段推进（门禁）</b> → <b>报价/合同审批</b> → <b>签订生成回款计划</b> → <b>回款核销</b> → <b>复购增购回到商机</b>。</p>
+<h3>3.2 状态流转规则要点</h3>
+<table>
+  <tr><th>对象</th><th>状态集</th><th>关键规则</th></tr>
+  <tr><td>线索</td><td>待分配 → 跟进中 → 已转化 / 无效 / 公海</td><td>24h 首访红线；7 天未跟进掉公海；无效为终态需原因；转化原子性生成客户+商机</td></tr>
+  <tr><td>商机</td><td>初步接触(15%) → 需求确认(30%) → 方案报价(45%) → 商务谈判(75%) → 赢单/输单</td><td>门禁校验（POC/报价单）；反向回退需审批；停留阈值告警；输单原因+竞对必填；加权预测=金额×赢率</td></tr>
+  <tr><td>合同</td><td>草稿 → 审批中 → 已签订/已驳回 → 执行中 → 已完成/已作废</td><td>必须关联商务谈判或赢单商机；审批后金额锁定；变更走子流程留痕</td></tr>
+  <tr><td>回款</td><td>计划中 → 待回款 → 部分回款/逾期 → 已回款 → 已核销</td><td>财务确认到账；先到期先核销；核销不可改、红冲需财务权限；全核销后合同自动完成</td></tr>
+</table>
+
+<!-- ============ 4 ============ -->
+<h2 id="c4">4. 功能需求（FR）</h2>
+<h3>4.1 需求总表（优先级：P0 本期必做 / P1 本期尽量 / P2 规划）</h3>
+<table>
+  <tr><th>编号</th><th>模块</th><th>需求描述</th><th>优先级</th><th>验收要点</th></tr>
+  <tr><td>FR-101</td><td rowspan="4">线索管理</td><td>线索创建（4 必填字段）+ 查重（手机号/公司名 15 天去重）</td><td><span class="tag tg">P0</span></td><td>重复线索阻断并提示原负责人</td></tr>
+  <tr><td>FR-102</td><td>线索池自动分配 + 手动调配；领取公海（受冷却期与上限约束）</td><td><span class="tag tg">P0</span></td><td>分配后进入 24h 首访倒计时</td></tr>
+  <tr><td>FR-103</td><td>超期未跟进自动掉落公海（7 天），站内信+企微双通道通知</td><td><span class="tag tg">P0</span></td><td>掉落动作写审计日志</td></tr>
+  <tr><td>FR-104</td><td>一键转化：事务内生成客户+商机+转化记录</td><td><span class="tag tg">P0</span></td><td>转化前资格检查（见图 2.1）</td></tr>
+  <tr><td>FR-201</td><td rowspan="3">客户管理</td><td>客户 360° 档案：基础信息/商机/合同/回款/跟进时间线聚合</td><td><span class="tag tg">P0</span></td><td>数据范围外客户仅显示名称+申请查看入口</td></tr>
+  <tr><td>FR-202</td><td>联系人决策链管理（决策人/影响人/使用人）</td><td><span class="tag ta">P1</span></td><td>支持角色标签与关系连线</td></tr>
+  <tr><td>FR-203</td><td>客户转移（团队内主管 / 跨团队总监），带二次确认与跟进记录迁移</td><td><span class="tag tg">P0</span></td><td>转移不重置商机阶段</td></tr>
+  <tr><td>FR-301</td><td rowspan="4">商机管理</td><td>商机列表/看板双视图，金额×赢率加权预测列</td><td><span class="tag tg">P0</span></td><td>阶段变更实时重算加权金额</td></tr>
+  <tr><td>FR-302</td><td>阶段门禁：进入目标阶段需通过校验项（附件/字段完整性）</td><td><span class="tag tg">P0</span></td><td>门禁项按阶段可配置</td></tr>
+  <tr><td>FR-303</td><td>反向回退审批流；停留超时（商务谈判 7 天）自动提醒</td><td><span class="tag tg">P0</span></td><td>超时同步主管</td></tr>
+  <tr><td>FR-304</td><td>输单原因+竞对必填；主管可重启输单商机</td><td><span class="tag ta">P1</span></td><td>输单数据进复盘报表</td></tr>
+  <tr><td>FR-401</td><td rowspan="3">合同与回款</td><td>合同起草（关联商机）→ 分档审批（主管→法务→财务，>¥100 万加签总监）</td><td><span class="tag tg">P0</span></td><td>审批通过后核心字段锁定</td></tr>
+  <tr><td>FR-402</td><td>签订后自动生成分期回款计划，支持调整</td><td><span class="tag tg">P0</span></td><td>计划变更留痕</td></tr>
+  <tr><td>FR-403</td><td>回款登记→财务确认→自动核销（先到期先核销）→回写合同进度/客户成交额</td><td><span class="tag tg">P0</span></td><td>核销不可改，红冲需财务权限</td></tr>
+  <tr><td>FR-501</td><td rowspan="3">权限与风控</td><td>三级数据范围（本人/团队/区域）SQL 层过滤 + 字段级脱敏（手机号等）</td><td><span class="tag tg">P0</span></td><td>详见第 6 章矩阵</td></tr>
+  <tr><td>FR-502</td><td>折扣/合同金额分档审批流引擎</td><td><span class="tag tg">P0</span></td><td>审批 SLA 48h 超时升级</td></tr>
+  <tr><td>FR-503</td><td>全量操作审计日志；导出水印；30 天回收站</td><td><span class="tag ta">P1</span></td><td>日志保留 ≥ 2 年</td></tr>
+  <tr><td>FR-601</td><td rowspan="2">指标看板</td><td>全生命周期指标自动计算（第 7 章 10 项核心指标）</td><td><span class="tag tg">P0</span></td><td>T+1 凌晨批算</td></tr>
+  <tr><td>FR-602</td><td>红线预警：跟进及时率/逾期回款/阶段停留超阈值推送主管</td><td><span class="tag ta">P1</span></td><td>预警阈值可配</td></tr>
+</table>
+
+<!-- ============ 5 ============ -->
+<h2 id="c5">5. 页面结构与原型说明</h2>
+<p>高保真原型见《<b>高保真原型_CRM后台.html</b>》（等效 Axure 交互稿，支持演示角色切换联动数据范围）。页面清单：</p>
+<table>
+  <tr><th>#</th><th>页面</th><th>对应信息架构</th><th>关键交互</th></tr>
+  <tr><td>P1</td><td>销售工作台</td><td>① 工作台</td><td>待办四象限、漏斗、目标完成度、公海动态</td></tr>
+  <tr><td>P2</td><td>线索管理（列表/公海）</td><td>② 客户管理</td><td>查重、领取、转化入口、权限提示条</td></tr>
+  <tr><td>P3</td><td>线索详情</td><td>② 客户管理</td><td>阶段流、跟进时间线、转化资格检查</td></tr>
+  <tr><td>P4</td><td>客户管理</td><td>② 客户管理</td><td>360° 列表、数据范围外脱敏行</td></tr>
+  <tr><td>P5</td><td>商机列表</td><td>③ 商机与交易</td><td>加权预测列、停留超时标红</td></tr>
+  <tr><td>P6</td><td>商机看板</td><td>③ 商机与交易</td><td>六阶段泳道、金额漏斗汇总</td></tr>
+  <tr><td>P7</td><td>商机详情</td><td>③ 商机与交易</td><td>阶段门禁、决策链、预测贡献</td></tr>
+  <tr><td>P8</td><td>合同管理</td><td>③ 商机与交易</td><td>审批流状态、回款进度条</td></tr>
+  <tr><td>P9</td><td>回款管理</td><td>③ 商机与交易</td><td>DSO/逾期 KPI、登记回款入口</td></tr>
+  <tr><td>P10</td><td>角色与数据权限</td><td>⑤ 系统管理</td><td>权限矩阵节选、数据范围 SQL 口径</td></tr>
+</table>
+
+<!-- ============ 6 ============ -->
+<h2 id="c6">6. 数据权限设计（角色 × 数据范围 × 操作项）</h2>
+<h3>6.1 权限模型</h3>
+<div class="note"><b>模型公式：</b>权限判定 = f(功能权限[角色], 数据范围[角色], 字段权限[角色×字段])。数据范围在数据访问层（SQL）过滤，而非前端隐藏；全部越权尝试写入审计日志。</div>
+<div class="formula">SELF   : owner_id = current_user OR current_user ∈ collaborators<br>TEAM   : owner.dept_id ∈ current_user.dept 子树（含下级）<br>REGION : owner.dept_id ∈ current_user.region 子树（区域组织树全节点）<br>POOL   : owner_id IS NULL（公海，领取受冷却期/上限约束）</div>
+<h3>6.2 权限矩阵</h3>
+<p>完整矩阵（28 行操作项 × 3 角色）见交付物 <b>《CRM权限矩阵.xlsx》</b>，关键行如下：</p>
+<table>
+  <tr><th>操作项</th><th>销售 · 本人</th><th>销售主管 · 本团队</th><th>区域总监 · 本区域</th><th>技术控制点</th></tr>
+  <tr><td>查看列表/详情（线索/客户/商机/合同/回款）</td><td><span class="tag tg">✓ 本人+协作</span></td><td><span class="tag tg">✓ 本团队</span></td><td><span class="tag tg">✓ 本区域</span></td><td>SQL 行级过滤</td></tr>
+  <tr><td>查看客户手机号</td><td><span class="tag ta">脱敏</span></td><td><span class="tag tg">✓ 明文</span></td><td><span class="tag ta">脱敏</span></td><td>字段级权限</td></tr>
+  <tr><td>新建（线索/客户/商机/合同）</td><td><span class="tag tg">✓</span></td><td><span class="tag tg">✓</span></td><td><span class="tag tx">—（不直营）</span></td><td>功能权限</td></tr>
+  <tr><td>编辑本人记录</td><td><span class="tag tg">✓</span></td><td><span class="tag tg">✓</span></td><td><span class="tag tx">—</span></td><td>owner 校验</td></tr>
+  <tr><td>编辑他人记录</td><td><span class="tag tr">✗</span></td><td><span class="tag tg">✓（留痕）</span></td><td><span class="tag tr">✗（只读）</span></td><td>审计日志</td></tr>
+  <tr><td>删除</td><td><span class="tag tr">✗</span></td><td><span class="tag tg">✓ → 回收站 30 天</span></td><td><span class="tag tr">✗</span></td><td>回收站可恢复</td></tr>
+  <tr><td>转移客户/商机</td><td><span class="tag tr">✗</span></td><td><span class="tag tg">✓ 团队内</span></td><td><span class="tag tg">✓ 跨团队</span></td><td>二次确认+迁移跟进记录</td></tr>
+  <tr><td>公海：领取</td><td><span class="tag tg">✓（冷却期/上限）</span></td><td><span class="tag tg">✓</span></td><td><span class="tag tx">—</span></td><td>规则引擎</td></tr>
+  <tr><td>公海：手动掉落他人客户</td><td><span class="tag tr">✗</span></td><td><span class="tag tg">✓</span></td><td><span class="tag tg">✓</span></td><td>通知原负责人</td></tr>
+  <tr><td>商机阶段推进/回退</td><td><span class="tag tg">✓ 本人推进</span></td><td><span class="tag ta">✓ 回退需审批</span></td><td><span class="tag tx">—</span></td><td>阶段门禁+审批流</td></tr>
+  <tr><td>折扣审批（&lt;95 折）</td><td><span class="tag tx">—（发起人）</span></td><td><span class="tag tg">✓ 95-90 折</span></td><td><span class="tag tg">✓ &lt;90 折 / &gt;¥100万终审</span></td><td>分档审批流引擎</td></tr>
+  <tr><td>合同作废</td><td><span class="tag tr">✗</span></td><td><span class="tag ta">✓（发起）</span></td><td><span class="tag tg">✓（审批）</span></td><td>双人流</td></tr>
+  <tr><td>回款登记</td><td><span class="tag tg">✓（待财务确认）</span></td><td><span class="tag tg">✓</span></td><td><span class="tag tx">—</span></td><td>财务确认后核销</td></tr>
+  <tr><td>导入/导出</td><td><span class="tag ta">申请制</span></td><td><span class="tag tg">✓ 本团队</span></td><td><span class="tag tg">✓ 本区域</span></td><td>水印+日志留存</td></tr>
+  <tr><td>业绩报表</td><td><span class="tag tg">✓ 本人</span></td><td><span class="tag tg">✓ 本团队</span></td><td><span class="tag tg">✓ 本区域汇总</span></td><td>行级权限</td></tr>
+  <tr><td>系统配置（角色/审批流/公海规则）</td><td><span class="tag tr">✗</span></td><td><span class="tag tr">✗</span></td><td><span class="tag ta">✓ 区域内参数</span></td><td>平台管理员终审</td></tr>
+</table>
+<h3>6.3 特殊规则</h3>
+<ul>
+  <li><b>协作机制</b>：owner 可邀请协作人（读写）与只读成员，协作人获得该记录 SELF 级访问；</li>
+  <li><b>撞单仲裁</b>：跨团队重复客户由区域总监仲裁归属，仲裁记录不可撤销；</li>
+  <li><b>离职交接</b>：一键转移名下全部数据，转移后原账号数据范围立即回收。</li>
+</ul>
+
+<!-- ============ 7 ============ -->
+<h2 id="c7">7. 客户全生命周期指标方案</h2>
+<h3>7.1 指标体系总览</h3>
+<p>按生命周期分四层：<b>获客层（线索）→ 转化层（商机）→ 履约层（合同）→ 回款层（资金）</b>，共 10 项核心指标，每项含口径、公式、阈值与责任角色。</p>
+<table>
+  <tr><th>层级</th><th>指标</th><th>计算公式</th><th>健康阈值</th><th>责任角色</th></tr>
+  <tr><td rowspan="3">获客层</td><td><b>① 线索转化率</b></td><td>已转化线索数 ÷ 有效线索总数（按渠道下钻）</td><td>≥ 20%</td><td>市场/销售</td></tr>
+  <tr><td>② 线索首访及时率</td><td>24h 内完成首访线索数 ÷ 分配线索总数</td><td>≥ 95%</td><td>销售</td></tr>
+  <tr><td>③ 公海流转率</td><td>周期内掉入公海线索数 ÷ 在管线索总数</td><td>10%-25%（过低=私藏，过高=质量差）</td><td>销售主管</td></tr>
+  <tr><td rowspan="4">转化层</td><td><b>④ 赢单率</b></td><td>赢单商机数 ÷ 关单商机数（赢单+输单）</td><td>≥ 30%</td><td>销售主管</td></tr>
+  <tr><td><b>⑤ 赢单周期</b></td><td>Σ(赢单关单日 − 商机创建日) ÷ 赢单数，同时输出 P50/P90</td><td>P50 ≤ 45 天</td><td>销售主管</td></tr>
+  <tr><td>⑥ 阶段转化率</td><td>进入下一阶段商机数 ÷ 进入本阶段商机数（逐阶段）</td><td>每级 ≥ 50%</td><td>销售主管</td></tr>
+  <tr><td>⑦ <b>跟进及时率</b></td><td>按规则准时跟进次数 ÷ 应跟进总次数（新增线索 24h；在谈商机 ≤7 天；成交客户 ≤30 天）</td><td>≥ 92%</td><td>销售/主管</td></tr>
+  <tr><td>履约层</td><td>⑧ 合同平均审批时长</td><td>Σ(审批通过时刻 − 提交时刻) ÷ 合同数</td><td>≤ 48h</td><td>主管/财务</td></tr>
+  <tr><td rowspan="2">回款层</td><td>⑨ 回款达成率</td><td>实际核销回款额 ÷ 计划回款额（本期）</td><td>≥ 90%</td><td>财务/主管</td></tr>
+  <tr><td>⑩ 回款周期 DSO</td><td>Σ(核销日 − 合同签订日) ÷ 合同数（或应收账款周转口径）</td><td>≤ 45 天</td><td>财务</td></tr>
+</table>
+<h3>7.2 三个重点指标的落地细节</h3>
+<h3>① 线索转化率</h3>
+<ul>
+  <li><b>口径</b>：分子=状态变更为「已转化」的线索；分母=剔除「无效且 24h 内判定」后的线索（避免垃圾数据稀释）；</li>
+  <li><b>下钻维度</b>：渠道 → 行业 → 区域 → 个人；支撑「渠道 ROI 排序」决策；</li>
+  <li><b>看板</b>：工作台 KPI 卡（本人）/ 主管驾驶舱（团队对比渠道柱状图）；</li>
+  <li><b>预警</b>：单渠道转化率连续 2 周 &lt; 10% 时通知市场负责人。</li>
+</ul>
+<h3>⑤ 赢单周期</h3>
+<ul>
+  <li><b>口径</b>：赢单商机关单日 − 创建日；同时统计<b>各阶段停留时长</b>定位瓶颈；</li>
+  <li><b>分位值</b>：P50/P90 双值展示，避免均值被极端值扭曲；</li>
+  <li><b>关联动作</b>：与「阶段停留阈值」联动，超 P75 分位自动标记黄色风险；</li>
+  <li><b>复盘</b>：季度输出「周期 vs 赢单率」散点，识别高耗低效商机模式。</li>
+</ul>
+<h3>⑦ 跟进及时率</h3>
+<ul>
+  <li><b>口径</b>：系统按三条规则生成「应跟进」任务（24h 首访 / 7 天商机 / 30 天成交客户），在截止前完成有效跟进（电话/拜访/有效沟通记录）计 1 次；</li>
+  <li><b>红线</b>：92%（低于即触发主管周报点评）；个人连续 2 周 &lt; 80% 进入主管重点关注名单；</li>
+  <li><b>反作弊</b>：跟进记录需含摘要 ≥ 10 字或外勤签到凭证，纯点击不计。</li>
+</ul>
+<h3>7.3 数据采集与计算</h3>
+<div class="formula">链路：业务库 binlog → 数仓 ODS → DWD 明细（事件：clue_created / followup_done / stage_changed / payment_verified）→ DWS 日汇总 → 指标服务 T+1 06:00 批算 → 看板/预警</div>
+<ul>
+  <li>指标全部<b>可追溯到事件表</b>，支持自定义时间窗对比（周/月/季环比）；</li>
+  <li>角色数据范围同样作用于指标：销售看本人、主管看团队、总监看区域汇总。</li>
+</ul>
+
+<!-- ============ 8 ============ -->
+<h2 id="c8">8. 非功能性需求</h2>
+<table>
+  <tr><th>类别</th><th>要求</th></tr>
+  <tr><td>性能</td><td>列表页 P95 &lt; 1s（10 万级数据 + 数据范围过滤）；导出 5 万行 &lt; 60s</td></tr>
+  <tr><td>安全</td><td>手机号等敏感字段 AES 存储 + 展示脱敏；导出水印（人名+时间）；审计日志保留 2 年</td></tr>
+  <tr><td>可用性</td><td>99.9%；核心写操作幂等（转化/核销）</td></tr>
+  <tr><td>兼容</td><td>Chrome/Edge 最新两版；1440px+ 桌面优先，移动端 P2</td></tr>
+</table>
+
+<!-- ============ 9 ============ -->
+<h2 id="c9">9. 里程碑与风险</h2>
+<table class="revision">
+  <tr><th>阶段</th><th>内容</th><th>出口标准</th></tr>
+  <tr><td>M1（2 周）</td><td>PRD 评审冻结、权限矩阵评审</td><td>研发/法务/财务会签</td></tr>
+  <tr><td>M2（4 周）</td><td>线索+客户+商机（P0）</td><td>数据范围过滤冒烟通过</td></tr>
+  <tr><td>M3（4 周）</td><td>合同+回款+审批流（P0）</td><td>核销链路账实一致验证</td></tr>
+  <tr><td>M4（3 周）</td><td>指标看板+预警+灰度</td><td>指标口径与财务对账一致</td></tr>
+</table>
+<div class="warnbox"><b>主要风险：</b>① 数据范围过滤性能（预留：部门树物化 + 索引设计）；② 公海规则过严导致销售抵触（灰度期允许主管豁免 1 次/月）；③ 指标口径与财务对不齐（M4 出口标准强制对账）。</div>
+
+<!-- ============ 附录 ============ -->
+<h2 id="c10">附录</h2>
+<h3>A. 名词表</h3>
+<table>
+  <tr><th>名词</th><th>定义</th></tr>
+  <tr><td>LTC</td><td>Leads to Cash，从线索到回款的端到端流程</td></tr>
+  <tr><td>公海 / 冷却期</td><td>无负责人线索池；客户掉落公海后，原负责人 N 天内不可重新领取</td></tr>
+  <tr><td>阶段门禁</td><td>商机进入下一阶段前必须通过的系统校验项</td></tr>
+  <tr><td>加权预测</td><td>商机金额 × 阶段赢率的汇总预测值</td></tr>
+  <tr><td>DSO</td><td>Days Sales Outstanding，应收账款周转天数</td></tr>
+</table>
+<h3>B. 修订记录</h3>
+<table class="revision">
+  <tr><th>版本</th><th>日期</th><th>修订人</th><th>说明</th></tr>
+  <tr><td>V1.0</td><td>2026-09-17</td><td>产品团队</td><td>首版：流程/权限/指标/PRD 全量初稿</td></tr>
+</table>
+
+</article>
+</body>
+</html>

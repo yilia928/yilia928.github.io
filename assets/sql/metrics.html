@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>指标口径定义 · SaaS 功能使用与留存分析</title>
+<style>
+:root{--ink:#16233a;--ink2:#45526b;--ink3:#7d8899;--amber:#b45309;--line:#e3e7ee;--bg:#f6f7f9;--mono:"JetBrains Mono",Consolas,monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.85}
+.wrap{max-width:860px;margin:0 auto;padding:36px 26px 70px}
+a.back{font-size:13px;color:var(--ink2);text-decoration:none}
+a.back:hover{color:var(--amber)}
+h1{font-size:24px;margin:18px 0 4px}
+.meta{font-size:12.5px;color:var(--ink3);margin-bottom:8px}
+h2{font-size:17px;margin:30px 0 8px;padding-left:10px;border-left:3px solid var(--amber)}
+p{color:var(--ink2);margin:8px 0}
+code{font-family:var(--mono);background:#eef1f5;border-radius:4px;padding:1px 6px;font-size:12.5px}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;margin:10px 0}
+th{background:#f2f5fa;text-align:left;padding:8px 12px;border:1px solid var(--line);color:var(--ink2);font-weight:600}
+td{padding:8px 12px;border:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+blockquote{border-left:3px solid #ecd3a8;background:#fdf6ea;padding:10px 16px;color:var(--ink2);font-size:13.5px;margin:12px 0}
+ol,ul{margin:8px 0 8px 22px;color:var(--ink2)}
+li{margin:5px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="javascript:history.back()">← 返回</a>
+  <h1>SaaS 产品功能使用与留存分析 · 指标口径定义</h1>
+  <p class="meta">版本 v1.0 ｜ 数据窗口：注册 2026-01-01 ~ 2026-07-31，行为数据截至 2026-08-31</p>
+
+  <h2>1. 数据集与事件字典</h2>
+  <p><b>users（用户维表）</b></p>
+  <table>
+    <tr><th style="width:160px">字段</th><th>说明</th></tr>
+    <tr><td><code>user_id</code></td><td>用户唯一标识</td></tr>
+    <tr><td><code>signup_date</code></td><td>注册日期（YYYY-MM-DD）</td></tr>
+    <tr><td><code>channel</code></td><td>获客渠道：自然流量 / SEM投放 / 内容营销 / 老客推荐 / 线下活动</td></tr>
+    <tr><td><code>plan</code></td><td>套餐：免费版 / 试用版 / 专业版</td></tr>
+  </table>
+  <p><b>events（行为事件表）</b></p>
+  <table>
+    <tr><th style="width:180px">事件名</th><th>含义</th></tr>
+    <tr><td><code>signup</code></td><td>完成注册</td></tr>
+    <tr><td><code>login</code></td><td>登录（会话级，一次会话记一次）</td></tr>
+    <tr><td><code>create_project</code></td><td>创建项目 / 工作区</td></tr>
+    <tr><td><code>invite_member</code></td><td>邀请协作成员</td></tr>
+    <tr><td><code>generate_report</code></td><td>生成分析报表（核心功能）</td></tr>
+    <tr><td><code>export_data</code></td><td>导出数据</td></tr>
+    <tr><td><code>dashboard_view</code></td><td>查看仪表盘</td></tr>
+  </table>
+
+  <h2>2. 激活漏斗口径</h2>
+  <p>漏斗共 5 步，<b>严格按发生日期的先后顺序</b>判定（同一天视为满足顺序，避免小时级时间戳噪声）：</p>
+  <table>
+    <tr><th style="width:220px">步骤</th><th>判定条件</th></tr>
+    <tr><td>① 注册</td><td>存在 signup 事件（= 全员）</td></tr>
+    <tr><td>② 首次登录</td><td>存在 login 事件，且 date(首次 login) ≥ date(signup)</td></tr>
+    <tr><td>③ 创建首个项目</td><td>存在 create_project 事件，且 date(首次) ≥ date(首次 login)</td></tr>
+    <tr><td>④ 邀请协作者</td><td>存在 invite_member 事件，且 date(首次) ≥ date(首次 create_project)</td></tr>
+    <tr><td>⑤ 生成首份报表（<b>激活完成</b>）</td><td>存在 generate_report 事件，且 date(首次) ≥ date(首次 invite_member)</td></tr>
+  </table>
+  <ul>
+    <li><b>整体转化率</b> = 该步完成人数 ÷ 注册人数（分母为全部注册用户）</li>
+    <li><b>步间转化率</b> = 该步完成人数 ÷ 上一步完成人数</li>
+    <li><b>流失人数</b> = 上一步完成人数 − 该步完成人数</li>
+  </ul>
+  <blockquote>以「生成首份分析报表」作为激活（Aha Moment）完成标志。理由：报表是产品核心价值载体，且已验证激活用户次月留存（59.65%）约为未激活用户（23.73%）的 2.5 倍。</blockquote>
+
+  <h2>3. 核心功能使用频次口径</h2>
+  <ul>
+    <li><b>功能使用总量</b> = 该事件在数据窗口内的总发生次数</li>
+    <li><b>使用人数</b> = 发生过该事件的去重用户数</li>
+    <li><b>人均使用次数</b> = 使用总量 ÷ 使用人数</li>
+    <li><b>活跃深度分桶</b>（按「用户 × 自然月」粒度统计 generate_report 次数）：1 次 / 2–3 次 / 4–6 次 / 7–10 次 / 10 次以上</li>
+    <li><b>已激活用户</b> = 数据窗口内至少产生过 1 次 generate_report 的用户；否则为未激活用户</li>
+  </ul>
+
+  <h2>4. 次月留存口径</h2>
+  <ul>
+    <li><b>同期群（Cohort）</b>：按用户注册自然月划分（<code>substr(signup_date,1,7)</code>）</li>
+    <li><b>次月留存用户</b>：注册月为 M 的用户，在 <b>M+1 自然月内至少有 1 次 login 事件</b></li>
+    <li><b>次月留存率 M2</b> = 次月留存用户数 ÷ 该同期群注册用户数</li>
+    <li>注意：M+1 必须已被行为数据完整覆盖。本数据集注册窗口为 1~7 月，行为数据截至 8-31，故 7 月同期群的 M+1（8 月）数据完整，全部同期群可比。</li>
+    <li>「次月活跃」以 login 为准（会话级活跃），不以核心功能使用为准。</li>
+  </ul>
+
+  <h2>5. 已知限制与注意事项</h2>
+  <ol>
+    <li>漏斗顺序按<b>日期级</b>判定；若需小时级严格顺序，需保证埋点时间的准确性（当前数据存在同日内乱序，属正常埋点噪声）。</li>
+    <li>未观测「退款 / 注销」事件，留存未做去噪处理。</li>
+    <li>本项目数据为模拟生成，用于方法与链路演示；上线真实数据时仅需替换 <code>data/</code> 下两个 CSV，SQL 无需改动。</li>
+  </ol>
+</div>
+</body>
+</html>

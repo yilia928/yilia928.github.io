@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS 产品功能使用与留存分析报告</title>
+<style>
+  :root{
+    --ink:#1e293b; --muted:#64748b; --line:#e2e8f0; --bg:#f8fafc; --card:#ffffff;
+    --brand:#4f46e5; --brand2:#0ea5e9; --danger:#dc2626; --warn:#d97706; --ok:#059669;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px}
+  .wrap{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+  header.hero{background:linear-gradient(135deg,#312e81,#4f46e5 55%,#0ea5e9);border-radius:16px;color:#fff;padding:44px 40px;margin-bottom:36px}
+  header.hero h1{font-size:28px;margin-bottom:10px}
+  header.hero p{opacity:.92;font-size:14px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+  .kpi{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:14px 16px}
+  .kpi b{display:block;font-size:24px}
+  .kpi span{font-size:12px;opacity:.85}
+  h2{font-size:20px;margin:44px 0 6px;display:flex;align-items:center;gap:10px}
+  h2 .no{background:var(--brand);color:#fff;border-radius:8px;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-top:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}
+  th{background:#f1f5f9;text-align:left;padding:8px 10px;font-weight:600;border-bottom:2px solid var(--line)}
+  td{padding:8px 10px;border-bottom:1px solid var(--line)}
+  tr.hl td{background:#fef2f2;font-weight:600}
+  .tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600}
+  .tag.red{background:#fee2e2;color:var(--danger)} .tag.green{background:#d1fae5;color:var(--ok)} .tag.amber{background:#fef3c7;color:var(--warn)}
+  .callout{border-left:4px solid var(--danger);background:#fef2f2;border-radius:0 10px 10px 0;padding:14px 18px;margin-top:14px;font-size:14px}
+  .callout.ok{border-color:var(--ok);background:#ecfdf5}
+  .callout.info{border-color:var(--brand2);background:#f0f9ff}
+  .recs{counter-reset:rec}
+  .rec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:12px;display:flex;gap:16px}
+  .rec::before{counter-increment:rec;content:counter(rec);flex:none;width:34px;height:34px;border-radius:10px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .rec h3{font-size:15px;margin-bottom:4px}
+  .rec p{font-size:13.5px;color:#475569}
+  .rec .ev{font-size:12.5px;color:var(--brand);margin-top:6px;font-weight:600}
+  svg text{font-family:inherit}
+  footer{margin-top:50px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:16px}
+  code{background:#f1f5f9;padding:1px 6px;border-radius:6px;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>SaaS 产品功能使用与留存分析报告</h1>
+  <p>数据窗口：注册 2026-01-01 ~ 2026-07-31 ｜ 行为数据截至 2026-08-31 ｜ 样本：5,000 名注册用户 / 46,549 条行为事件</p>
+  <p>分析链路：SQLite + SQL 脚本集（激活漏斗 / 功能使用频次 / 次月留存 / 流失定位）</p>
+  <div class="kpis">
+    <div class="kpi"><b>43.7%</b><span>整体激活率（完成全部漏斗）</span></div>
+    <div class="kpi"><b>63.0%</b><span>「创建首个项目」步间转化 · 最薄弱</span></div>
+    <div class="kpi"><b>40.0%</b><span>平均次月留存率（M2）</span></div>
+    <div class="kpi"><b>2.5×</b><span>激活用户 vs 未激活用户次月留存倍数</span></div>
+  </div>
+</header>
+
+<h2><span class="no">1</span>新用户激活漏斗</h2>
+<div class="sub">口径：注册 → 首次登录 → 创建首个项目 → 邀请协作者 → 生成首份报表（激活完成），按事件日期先后判定顺序</div>
+<div class="card">
+  <svg viewBox="0 0 880 300" width="100%">
+    <g font-size="13">
+      <!-- rows: y=20,76,132,188,244 ; max width 620 for 100% -->
+      <text x="0" y="36" fill="#1e293b" font-weight="600">① 注册</text>
+      <rect x="130" y="18" width="620" height="30" rx="6" fill="#4f46e5"/>
+      <text x="140" y="38" fill="#fff">5,000 人 · 100%</text>
+      <text x="770" y="38" fill="#64748b">步间转化 —</text>
+
+      <text x="0" y="92" fill="#1e293b" font-weight="600">② 首次登录</text>
+      <rect x="130" y="74" width="588" height="30" rx="6" fill="#6366f1"/>
+      <text x="140" y="94" fill="#fff">4,742 人 · 94.8%</text>
+      <text x="770" y="94" fill="#059669" font-weight="600">94.8% ↑</text>
+
+      <text x="0" y="148" fill="#1e293b" font-weight="600">③ 创建首个项目</text>
+      <rect x="130" y="130" width="371" height="30" rx="6" fill="#dc2626"/>
+      <text x="140" y="150" fill="#fff">2,989 人 · 59.8%</text>
+      <text x="770" y="150" fill="#dc2626" font-weight="700">63.0% ⚠ 流失最大</text>
+
+      <text x="0" y="204" fill="#1e293b" font-weight="600">④ 邀请协作者</text>
+      <rect x="130" y="186" width="305" height="30" rx="6" fill="#0ea5e9"/>
+      <text x="140" y="206" fill="#fff">2,459 人 · 49.2%</text>
+      <text x="770" y="206" fill="#059669" font-weight="600">82.3%</text>
+
+      <text x="0" y="260" fill="#1e293b" font-weight="600">⑤ 生成首份报表</text>
+      <rect x="130" y="242" width="271" height="30" rx="6" fill="#059669"/>
+      <text x="140" y="262" fill="#fff">2,186 人 · 43.7%</text>
+      <text x="770" y="262" fill="#059669" font-weight="600">88.9%</text>
+    </g>
+  </svg>
+  <div class="callout">
+    <b>核心发现：漏斗中流失最严重的环节是「首次登录 → 创建首个项目」。</b>完成登录的 4,742 名用户中仅 2,989 人创建了首个项目，单步流失 <b>1,753 人（步间转化率仅 63.0%）</b>，占总注册用户的 35.1%。相比之下，后续「邀请协作者」(82.3%) 与「生成首份报表」(88.9%) 两步表现健康。用户注册后能够登录，却无法顺利跨出"从观看到动手"的第一步，是激活率整体只有 43.7% 的主要瓶颈。
+  </div>
+</div>
+
+<h2><span class="no">2</span>流失环节定位：分渠道 × 分套餐</h2>
+<div class="sub">按「创建首个项目」步间转化率升序排列（SQL：04_funnel_leak_locator.sql，前 10 组）</div>
+<div class="card">
+  <table>
+    <tr><th>渠道</th><th>套餐</th><th>注册数</th><th>登录转化</th><th>创建项目 ←</th><th>邀请转化</th><th>报表转化</th><th>整体激活</th></tr>
+    <tr class="hl"><td>SEM投放</td><td>试用版</td><td>403</td><td>92.1%</td><td>48.8% ⚠</td><td>78.5%</td><td>83.8%</td><td>29.5%</td></tr>
+    <tr><td>SEM投放</td><td>免费版</td><td>781</td><td>93.1%</td><td>53.2%</td><td>78.8%</td><td>82.3%</td><td>32.1%</td></tr>
+    <tr><td>SEM投放</td><td>专业版</td><td>196</td><td>86.7%</td><td>54.1%</td><td>76.1%</td><td>81.4%</td><td>29.1%</td></tr>
+    <tr><td>自然流量</td><td>试用版</td><td>446</td><td>94.6%</td><td>54.3%</td><td>79.0%</td><td>88.4%</td><td>35.9%</td></tr>
+    <tr><td>自然流量</td><td>免费版</td><td>834</td><td>94.2%</td><td>56.7%</td><td>82.3%</td><td>88.8%</td><td>39.1%</td></tr>
+    <tr><td>自然流量</td><td>专业版</td><td>224</td><td>95.1%</td><td>58.2%</td><td>83.1%</td><td>88.3%</td><td>40.6%</td></tr>
+    <tr><td>线下活动</td><td>专业版</td><td>66</td><td>95.5%</td><td>68.3%</td><td>90.7%</td><td>94.9%</td><td>56.1%</td></tr>
+    <tr><td>内容营销</td><td>试用版</td><td>344</td><td>98.3%</td><td>69.2%</td><td>81.6%</td><td>90.1%</td><td>50.0%</td></tr>
+    <tr><td>线下活动</td><td>试用版</td><td>114</td><td>95.6%</td><td>69.7%</td><td>75.0%</td><td>93.0%</td><td>46.5%</td></tr>
+    <tr><td>内容营销</td><td>专业版</td><td>157</td><td>95.5%</td><td>71.3%</td><td>83.2%</td><td>87.6%</td><td>49.7%</td></tr>
+  </table>
+  <div class="callout info">
+    <b>人群定位：</b>「创建项目」环节的流失集中在 <b>SEM 投放渠道</b>（三个套餐的该步转化率均低于 55%，且该渠道注册量达 1,380 人、占总注册 27.6%）——付费流量带来的用户意图偏浅、与产品核心工作流匹配度低。内容营销与线下活动用户该步转化均在 68% 以上，说明问题的本质是<b>流量质量 × 新手引导</b>的叠加，而非产品功能本身不可用。
+  </div>
+</div>
+
+<h2><span class="no">3</span>核心功能使用频次</h2>
+<div class="sub">各功能使用总量与人均频次（SQL：02_feature_usage_frequency.sql）</div>
+<div class="card">
+  <svg viewBox="0 0 880 250" width="100%">
+    <g font-size="13">
+      <!-- max 16893 -> 560px -->
+      <text x="0" y="26" fill="#1e293b">登录 login</text>
+      <rect x="140" y="10" width="560" height="22" rx="5" fill="#4f46e5"/><text x="708" y="26" fill="#475569">16,893 次 · 4,742 人</text>
+      <text x="0" y="64" fill="#1e293b">生成报表</text>
+      <rect x="140" y="48" width="283" height="22" rx="5" fill="#0ea5e9"/><text x="431" y="64" fill="#475569">8,538 次 · 2,198 人 · 人均 3.88 次</text>
+      <text x="0" y="102" fill="#1e293b">仪表盘</text>
+      <rect x="140" y="86" width="204" height="22" rx="5" fill="#38bdf8"/><text x="352" y="102" fill="#475569">6,140 次 · 1,859 人</text>
+      <text x="0" y="140" fill="#1e293b">邀请成员</text>
+      <rect x="140" y="124" width="126" height="22" rx="5" fill="#f59e0b"/><text x="274" y="140" fill="#475569">3,805 次 · 2,460 人</text>
+      <text x="0" y="178" fill="#1e293b">导出数据</text>
+      <rect x="140" y="162" width="106" height="22" rx="5" fill="#10b981"/><text x="254" y="178" fill="#475569">3,184 次 · 1,158 人</text>
+      <text x="0" y="216" fill="#1e293b">创建项目</text>
+      <rect x="140" y="200" width="99" height="22" rx="5" fill="#dc2626"/><text x="247" y="216" fill="#475569">2,989 次（均为首建）</text>
+    </g>
+  </svg>
+  <table>
+    <tr><th>用户分组</th><th>人数</th><th>事件总量</th><th>人均事件数</th></tr>
+    <tr><td><span class="tag green">已激活</span>（生成过报表）</td><td>2,198</td><td>35,477</td><td><b>16.14</b></td></tr>
+    <tr><td><span class="tag red">未激活</span></td><td>2,802</td><td>11,072</td><td>3.95</td></tr>
+  </table>
+  <table style="margin-top:14px">
+    <tr><th>已激活用户 · 月度报表生成频次分布</th><th>用户-月数</th><th>占比</th></tr>
+    <tr><td>每月 1 次</td><td>2,412</td><td>56.4%</td></tr>
+    <tr><td>每月 2-3 次</td><td>1,139</td><td>26.6%</td></tr>
+    <tr><td>每月 4-6 次</td><td>727</td><td>17.0%</td></tr>
+    <tr><td>每月 7 次以上</td><td>1</td><td>0.02%</td></tr>
+  </table>
+  <div class="callout ok">
+    <b>解读：</b>激活用户人均产生 16.1 次事件，是未激活用户（4.0 次）的 4 倍，功能使用与激活强相关。但已激活用户中 <b>56.4% 的用户-月仅生成 1 份报表</b>，7 次以上的重度使用几乎不存在——激活后的「使用深度」普遍偏浅，报表尚未成为用户的周期性工作习惯。
+  </div>
+</div>
+
+<h2><span class="no">4</span>次月留存分析</h2>
+<div class="sub">口径：注册月 M 的用户在 M+1 自然月内至少 1 次登录（SQL：03_month2_retention.sql）</div>
+<div class="card">
+  <svg viewBox="0 0 880 200" width="100%">
+    <g font-size="13">
+      <text x="0" y="16" fill="#64748b" font-size="12">按注册月同期群的次月留存率（%）</text>
+      <!-- baseline y=170, scale: 45% -> 140px -->
+      <g>
+        <rect x="40"  y="54" width="60" height="116" rx="6" fill="#94a3b8"/><text x="70"  y="46" text-anchor="middle" fill="#1e293b" font-weight="600">37.3</text><text x="70"  y="188" text-anchor="middle" fill="#64748b">1月</text>
+        <rect x="155" y="46" width="60" height="124" rx="6" fill="#94a3b8"/><text x="185" y="38" text-anchor="middle" fill="#1e293b" font-weight="600">40.0</text><text x="185" y="188" text-anchor="middle" fill="#64748b">2月</text>
+        <rect x="270" y="53" width="60" height="117" rx="6" fill="#94a3b8"/><text x="300" y="45" text-anchor="middle" fill="#1e293b" font-weight="600">37.7</text><text x="300" y="188" text-anchor="middle" fill="#64748b">3月</text>
+        <rect x="385" y="43" width="60" height="127" rx="6" fill="#6366f1"/><text x="415" y="35" text-anchor="middle" fill="#1e293b" font-weight="600">40.9</text><text x="415" y="188" text-anchor="middle" fill="#64748b">4月</text>
+        <rect x="500" y="43" width="60" height="127" rx="6" fill="#6366f1"/><text x="530" y="35" text-anchor="middle" fill="#1e293b" font-weight="600">40.9</text><text x="530" y="188" text-anchor="middle" fill="#64748b">5月</text>
+        <rect x="615" y="50" width="60" height="120" rx="6" fill="#94a3b8"/><text x="645" y="42" text-anchor="middle" fill="#1e293b" font-weight="600">38.7</text><text x="645" y="188" text-anchor="middle" fill="#64748b">6月</text>
+        <rect x="730" y="42" width="60" height="128" rx="6" fill="#4f46e5"/><text x="760" y="34" text-anchor="middle" fill="#1e293b" font-weight="600">41.2</text><text x="760" y="188" text-anchor="middle" fill="#64748b">7月</text>
+      </g>
+    </g>
+  </svg>
+  <table style="margin-top:6px">
+    <tr><th>按渠道</th><th>注册数</th><th>次月留存率</th><th></th></tr>
+    <tr><td>老客推荐</td><td>629</td><td><b>49.0%</b></td><td><span class="tag green">最优</span></td></tr>
+    <tr><td>内容营销</td><td>1,109</td><td>44.6%</td><td></td></tr>
+    <tr><td>线下活动</td><td>378</td><td>41.8%</td><td></td></tr>
+    <tr><td>自然流量</td><td>1,504</td><td>37.2%</td><td></td></tr>
+    <tr><td>SEM投放</td><td>1,380</td><td><b>33.0%</b></td><td><span class="tag red">最差</span></td></tr>
+  </table>
+  <table style="margin-top:14px">
+    <tr><th>按是否激活</th><th>人数</th><th>次月留存率</th></tr>
+    <tr><td>已激活用户</td><td>2,198</td><td><b>59.65%</b></td></tr>
+    <tr><td>未激活用户</td><td>2,802</td><td>23.73%</td></tr>
+  </table>
+  <div class="callout">
+    <b>解读：</b>整体次月留存约 40%，各月同期群基本平稳。两个显著的结构性信号：① <b>激活与否是留存的第一分水岭</b>——激活用户次月留存 59.7%，未激活用户仅 23.7%（相差 35.9pp），把用户推进漏斗最后一格是提升留存杠杆最大的动作；② <b>SEM 渠道「量大利薄」</b>——贡献 27.6% 的注册量但留存垫底（33.0%），与其漏斗前端的高流失相互印证。
+  </div>
+</div>
+
+<h2><span class="no">5</span>数据驱动的产品改进建议</h2>
+<div class="recs">
+  <div class="rec">
+    <div>
+      <h3>重构新手引导：把「创建首个项目」做成注册后的强制主线任务</h3>
+      <p>该环节单步流失 1,753 人、步间转化仅 63.0%，是全漏斗最薄弱点。建议：注册完成后直接进入「创建项目」引导流（提供 2-3 个行业模板一键创建，替代空白页），并在用户登录后 48 小时内通过引导清单（Checklist）+ 邮件/Push 召回未创建项目的用户。</p>
+      <div class="ev">依据：01 漏斗 63.0% ｜ 预期收益：该步转化 63%→75%，整体激活率约 43.7%→52%</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div>
+      <h3>为 SEM 渠道建立独立的落地页与激活路径</h3>
+      <p>SEM 用户「创建项目」转化率最低（48.8%~54.1%）且次月留存垫底（33.0%）。建议：SEM 落地页与广告关键词所承诺的场景对齐，注册后预填场景化项目模板；同时对 SEM 渠道设置激活成本/激活率考核，必要时下调低质词组投放预算，向内容营销（激活约 50%、留存 44.6%）倾斜。</p>
+      <div class="ev">依据：04 流失定位 + 03 渠道留存（SEM 33.0% vs 老客推荐 49.0%）</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div>
+      <h3>把「邀请协作者」前置为可选动作，降低协作门槛</h3>
+      <p>邀请环节本身转化尚可（82.3%），但它卡在报表生成之前，拖慢了价值到达。建议：允许跳过邀请直接生成首份报表（以模板示例数据演示核心价值），同时在用户创建项目后即时推荐邀请（分享链接、协作者席位赠送），把邀请从「串行阻塞」改为「并行增强」。</p>
+      <div class="ev">依据：01 漏斗顺序 ④→⑤ 的串行依赖；激活用户留存 59.7% 的强关联</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div>
+      <h3>建立「激活后 7 日习惯养成」机制，提升报表使用深度</h3>
+      <p>56.4% 的激活用户-月每月仅生成 1 份报表，使用深度不足会导致次月滑落为低频用户。建议：首份报表生成后触发「定时报表 / 订阅推送」引导，推动用户将报表绑定到周期性工作流；对连续 2 周未再生成报表的激活用户触发深度功能（导出、定时任务）召回。</p>
+      <div class="ev">依据：02 频次分布（1 次占比 56.4%，7 次以上近乎为 0）</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div>
+      <h3>放大老客推荐渠道，建立「激活率」为核心的增长北极星</h3>
+      <p>老客推荐渠道留存最高（49.0%）、漏斗表现最好，但仅占注册量 12.6%。建议上线双向激励的双边邀请计划，并建议将「新用户 7 日激活率」设为产品与增长团队的共同北极星指标，按本报告口径（漏斗五步 + 次月留存）建立周度看板持续监控。</p>
+      <div class="ev">依据：03 渠道留存排序；激活与留存 2.5 倍的关系</div>
+    </div>
+  </div>
+</div>
+
+<h2><span class="no">6</span>附录：交付物与复现方式</h2>
+<div class="card">
+  <table>
+    <tr><th>文件</th><th>说明</th></tr>
+    <tr><td><code>sql/00_schema_and_load.sql</code></td><td>建表与 CSV 装载脚本（SQLite）</td></tr>
+    <tr><td><code>sql/01_activation_funnel.sql</code></td><td>新用户激活漏斗（五步转化 + 流失）</td></tr>
+    <tr><td><code>sql/02_feature_usage_frequency.sql</code></td><td>核心功能使用频次（总量 / 人均 / 深度分桶）</td></tr>
+    <tr><td><code>sql/03_month2_retention.sql</code></td><td>次月留存（同期群 / 渠道 / 激活对比）</td></tr>
+    <tr><td><code>sql/04_funnel_leak_locator.sql</code></td><td>漏斗流失定位（渠道 × 套餐步间转化）</td></tr>
+    <tr><td><code>指标口径定义.md</code></td><td>全部指标口径、事件字典与注意事项</td></tr>
+    <tr><td><code>data/users.csv / events.csv</code></td><td>用户行为数据集（5,000 用户 / 46,549 事件）</td></tr>
+  </table>
+  <p style="margin-top:12px;font-size:13.5px;color:#475569">复现：<code>sqlite3 saas.db</code> → 执行 00 装载数据 → 依次执行 01~04；或运行 <code>python scripts/run_analysis.py</code>（自动建库、执行全部脚本并导出 results.json）。</p>
+</div>
+
+<footer>SaaS 产品功能使用与留存分析 ｜ 生成于 2026-09-17 ｜ 分析口径详见《指标口径定义文档》</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨境电商多店铺订单中台 · 王泳雯作品集</title>
+<style>
+:root{
+  --ink:#16233a; --ink2:#45526b; --ink3:#7d8899;
+  --blue:#1d4ed8; --blue-d:#1738a0; --blue-bg:#eef3ff;
+  --line:#e3e7ee; --bg:#f6f7f9; --card:#fff;
+  --mono:"JetBrains Mono","Cascadia Mono",Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.8}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:980px;margin:0 auto;padding:0 26px}
+.top{background:#fff;border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:54px}
+.top a.back{font-size:13.5px;color:var(--ink2)}
+.top a.back:hover{color:var(--blue);text-decoration:none}
+.hero{background:linear-gradient(160deg,#10203c,#1d3f77);color:#fff;padding:56px 0 48px}
+.hero .crumb{font-size:12.5px;letter-spacing:2px;color:#9db9e8;margin-bottom:14px}
+.hero h1{font-size:31px;line-height:1.4}
+.hero .sub{margin-top:12px;color:#c2d1e8;font-size:14.5px;max-width:780px}
+.hero .facts{display:flex;gap:30px;margin-top:26px;font-size:12.5px;color:#a9bcd9;flex-wrap:wrap}
+.hero .facts b{display:block;color:#e8effa;font-size:17px;font-family:var(--mono)}
+.sec{padding:44px 0 6px}
+.sec h2{font-size:21px;margin-bottom:6px}
+.sec .d{color:var(--ink3);font-size:13px;margin-bottom:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 26px;margin-bottom:16px}
+.card h3{font-size:16px;margin-bottom:8px}
+.card p{color:var(--ink2);font-size:14px}
+.card p + p{margin-top:8px}
+.card b{color:var(--ink)}
+ul.tick{margin:6px 0 0 18px;color:var(--ink2);font-size:14px}
+ul.tick li{margin:7px 0}
+ul.tick b{color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;margin-top:10px}
+th{background:#f2f5fa;text-align:left;padding:8px 12px;border:1px solid var(--line);color:var(--ink2);font-weight:600;white-space:nowrap}
+td{padding:8px 12px;border:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+td:first-child{color:var(--ink)}
+.ok{color:var(--blue-d);font-weight:700}
+.no{color:#b6bdc9}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+figure{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0}
+figure img{width:100%;display:block;border-bottom:1px solid var(--line)}
+figure figcaption{padding:10px 14px;font-size:12.5px;color:var(--ink2);background:#fff}
+figure figcaption b{color:var(--ink)}
+.deliv{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.deliv a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.deliv a:hover{text-decoration:none;border-color:#b9c9ee;box-shadow:0 8px 20px rgba(16,32,60,.07)}
+.deliv .t{font-size:14px;font-weight:600}
+.deliv .s{font-size:12.5px;color:var(--ink3);margin-top:4px}
+.callout{background:var(--blue-bg);border:1px solid #c9d8f5;border-radius:10px;padding:14px 18px;font-size:13.5px;color:var(--ink2);margin:14px 0}
+.callout b{color:var(--blue-d)}
+.foot{margin-top:52px;border-top:1px solid var(--line);background:#fff;padding:28px 0 44px}
+.foot p{font-size:12.5px;color:var(--ink3)}
+@media (max-width:760px){.shots,.deliv{grid-template-columns:1fr}.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="back" href="../index.html">← 返回作品集首页</a>
+  <a class="back" href="https://github.com/yilia928/crossborder-orderhub" target="_blank">GitHub 仓库 ↗</a>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <div class="crumb">项目一 · 产品设计 + 全栈实现 · 已开源</div>
+  <h1>跨境电商多店铺订单中台</h1>
+  <p class="sub">东南亚中小卖家普遍同时在 Shopee / Lazada / TikTok Shop 开 2–3 个平台、3–5 家店。这个项目把订单、库存、对账收进一个后台，覆盖「同步 → 审核 → 异常拦截 → 批量发货 → 对账」全链路。产品设计（画像 / IA / 状态机 / 数据模型 / 原型）与全栈实现、集成测试均独立完成。</p>
+  <div class="facts">
+    <span><b>独立完成</b>角色：产品 + 前后端 + 测试</span>
+    <span><b>10 表</b>多租户数据模型</span>
+    <span><b>5 × 8</b>角色 × 操作项 RBAC</span>
+    <span><b>32 项</b>集成测试全绿</span>
+  </div>
+</div></section>
+
+<div class="wrap">
+
+  <section class="sec">
+    <h2>问题</h2>
+    <div class="d">基于行业公开资料与竞品桌面调研（BigSeller、妙手 ERP、薛猫助手）归纳的三大高频痛点。</div>
+    <div class="card">
+      <ul class="tick">
+        <li><b>超卖</b>：各平台库存不同步，爆款下单后才发现缺货，只能取消订单、吃店铺扣分——多平台运营里最高发的真实损失；</li>
+        <li><b>漏单 / 错发</b>：订单散落在三个卖家后台，地址异常单没有拦截机制，批量发货纯手工；</li>
+        <li><b>对账难</b>：平台结算周期长、费用条目多，逐单核对耗时，差异发现即亏损。</li>
+      </ul>
+      <p style="margin-top:12px">竞品如 BigSeller 功能全但上手门槛高。差异化定位因此收窄为：<b>聚焦订单处理核心链路，做轻、快、易上手</b>——不做铺货、刊登这些已有成熟工具的功能。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>关键设计决策</h2>
+    <div class="d">四条规则决定了这个产品「不超卖、不漏单」的底线。</div>
+
+    <div class="card">
+      <h3>1 · 审核即锁定库存，异常单不进发货流程</h3>
+      <p>审核环节同时做库存比对与地址校验：可售不足转「缺货异常」，地址为空转「地址异常」；审核通过时在<b>同一事务内</b>按订单明细扣减库存并写入调整留痕表（关联订单号）。异常单止步于审核，从入口杜绝超卖，而不是发货时才发现。</p>
+      <p>发货只回传物流单号、不再动账；取消时仅对已锁定过库存的订单回补——pending 与缺货异常单取消不回补，避免库存虚增。</p>
+    </div>
+
+    <div class="card">
+      <h3>2 · 超卖预警只统计「尚未锁定」的需求</h3>
+      <p>预警口径 = 跨店可售量 vs 待审核订单的需求量。已锁定库存的订单不会再造成超卖，把预警留给真正有风险的 pending 单，可售低于待审需求即标高危——比单纯的「低库存阈值」更贴近真实风险。</p>
+    </div>
+
+    <div class="card">
+      <h3>3 · 5 角色 × 8 操作项 RBAC + 多租户隔离</h3>
+      <p>中小卖家团队有明确分工：主理人 / 运营 / 仓管 / 财务 / 客服。权限在后端做动作级强校验（越权返回 403），前端按角色隐藏入口；数据按租户（团队）隔离，跨租户访问详情返回 <b>404 而非 403</b>，不泄露资源存在性。这是财务和客服角色可以放心开通权限的前提。</p>
+      <table>
+        <tr><th>操作 / 角色</th><th>主理人</th><th>运营</th><th>仓管</th><th>财务</th><th>客服</th></tr>
+        <tr><td>同步订单 / 批量审核</td><td class="ok">✓</td><td class="ok">✓</td><td class="no">–</td><td class="no">–</td><td class="no">–</td></tr>
+        <tr><td>批量发货 / 调拨补货</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td><td class="no">–</td><td class="no">–</td></tr>
+        <tr><td>取消订单（异常处理）</td><td class="ok">✓</td><td class="ok">✓</td><td class="no">–</td><td class="no">–</td><td class="no">–</td></tr>
+        <tr><td>库存调整</td><td class="ok">✓</td><td class="no">–</td><td class="ok">✓</td><td class="no">–</td><td class="no">–</td></tr>
+        <tr><td>结算单核对</td><td class="ok">✓</td><td class="no">–</td><td class="no">–</td><td class="ok">✓</td><td class="no">–</td></tr>
+        <tr><td>联系买家</td><td class="ok">✓</td><td class="ok">✓</td><td class="no">–</td><td class="no">–</td><td class="ok">✓</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>4 · 同步是确定性的，测试才可复现</h3>
+      <p>店铺 / 商品 / 买家 / 单号按规则轮换生成，同一份种子永远得到同一批数据。32 项 API 集成测试在独立临时库上跑真实 HTTP 服务，覆盖鉴权、多租户隔离、RBAC 越权、状态机流转、库存锁定口径、分页不重不漏与对账差异回传。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>产品界面</h2>
+    <div class="d">系统实际运行截图（确定性演示数据，2 团队 / 6 账号 / 18 笔订单）。</div>
+    <div class="shots">
+      <figure><img src="../assets/orderhub/dashboard.png" alt="仪表盘"><figcaption><b>仪表盘</b> · 今日订单 / 待处理 / 异常 / 库存预警 / 对账提醒一屏总览</figcaption></figure>
+      <figure><img src="../assets/orderhub/orders.png" alt="订单列表"><figcaption><b>订单列表</b> · 平台 / 状态 / 关键词 / 时间区间筛选，服务端分页，批量操作</figcaption></figure>
+      <figure><img src="../assets/orderhub/order-detail.png" alt="订单详情"><figcaption><b>异常订单详情</b> · 拦截原因 + 按角色显示可用动作（动作级权限）</figcaption></figure>
+      <figure><img src="../assets/orderhub/inventory.png" alt="库存预警"><figcaption><b>库存预警</b> · 独立调整记录留痕，调整前后值可追溯</figcaption></figure>
+      <figure><img src="../assets/orderhub/ship-channel.png" alt="批量发货"><figcaption><b>批量发货</b> · 选仓 → 选渠道 → 打单 → 回传单号四步</figcaption></figure>
+      <figure><img src="../assets/orderhub/finance-rbac.png" alt="财务视角"><figcaption><b>财务视角</b> · 仅对账核对 + 全局只读，越权入口不可见</figcaption></figure>
+      <figure><img src="../assets/orderhub/tenant2.png" alt="多租户隔离"><figcaption><b>多租户隔离</b> · 另一个团队登录后只能看到自己的店铺与订单</figcaption></figure>
+      <figure><img src="../assets/orderhub/login.png" alt="登录页"><figcaption><b>登录页</b> · 6 个演示账号一键填充，方便切换角色演示</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>交付物</h2>
+    <div class="d">设计在前、实现在后，全部可直接打开或溯源。</div>
+    <div class="deliv">
+      <a href="../assets/orderhub/prototype.html" target="_blank"><div class="t">可交互高保真原型（6 页）</div><div class="s">纯 HTML 本地可打开：仪表盘 / 订单列表 / 详情 / 发货 / 库存 / 对账</div></a>
+      <a href="https://github.com/yilia928/crossborder-orderhub" target="_blank"><div class="t">GitHub 仓库（全栈源码）</div><div class="s">React 18 + TS + Express + SQLite，含 CI 与部署配置，可一键跑起</div></a>
+      <a href="../assets/orderhub/01-多店铺订单管理-需求背景与用户画像.md" target="_blank"><div class="t">01 · 需求背景与用户画像</div><div class="s">行业背景、四大矛盾、画像 A/B、痛点分级 P0–P2、竞品参考（含引用）</div></a>
+      <a href="../assets/orderhub/02-多店铺订单管理-信息架构与核心流程.md" target="_blank"><div class="t">02 · 信息架构与核心流程</div><div class="s">五大模块 IA、6 页原型清单、正向流与异常缺货流</div></a>
+      <a href="../assets/orderhub/03-多店铺订单管理-高保真原型说明.md" target="_blank"><div class="t">03 · 高保真原型说明</div><div class="s">原型设计说明</div></a>
+      <a href="../assets/orderhub/04-多店铺订单管理-数据模型设计.md" target="_blank"><div class="t">04 · 数据模型设计</div><div class="s">8 表 ER、状态机、逐表字段设计、建表 SQL 与设计决策</div></a>
+    </div>
+    <div class="callout"><b>边界声明：</b>Shopee / Lazada / TikTok 开放平台需要企业资质，个人开发者无法申请，订单同步用确定性模拟实现了全流程；接口层已预留替换点，把同步入口换成开放平台 Client 即可接真实数据。实现相对 Day 4 设计的演进（8 表 → 10 表：新增租户表与库存调整留痕表、RBAC 从预留到五角色落地）记录在仓库 tech.md 中。</div>
+  </section>
+
+  <section class="sec">
+    <h2>结果</h2>
+    <div class="card">
+      <ul class="tick">
+        <li>32 项集成测试全绿，覆盖鉴权 / 多租户 / RBAC / 状态机 / 库存锁定口径 / 对账；</li>
+        <li>支持一键部署（仓库自带 render.yaml 蓝图），生产模式单服务托管前后端；</li>
+        <li>项目已开源：<a href="https://github.com/yilia928/crossborder-orderhub" target="_blank">github.com/yilia928/crossborder-orderhub</a>，设计文档可在仓库内溯源。</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<footer class="foot"><div class="wrap">
+  <p>王泳雯 · B 端产品作品集 · <a href="../index.html">返回首页</a></p>
+</div></footer>
+
+</body>
+</html>

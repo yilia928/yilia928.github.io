@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM 客户与商机管理后台 · 逆向产品设计 · 王泳雯作品集</title>
+<style>
+:root{
+  --ink:#16233a; --ink2:#45526b; --ink3:#7d8899;
+  --teal:#0e7490; --teal-d:#0b5c73; --teal-bg:#e8f6f9;
+  --line:#e3e7ee; --bg:#f6f7f9; --card:#fff;
+  --mono:"JetBrains Mono","Cascadia Mono",Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.8}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:980px;margin:0 auto;padding:0 26px}
+.top{background:#fff;border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:54px}
+.top a.back{font-size:13.5px;color:var(--ink2)}
+.top a.back:hover{color:var(--teal);text-decoration:none}
+.hero{background:linear-gradient(160deg,#0d2430,#0e7490);color:#fff;padding:56px 0 48px}
+.hero .crumb{font-size:12.5px;letter-spacing:2px;color:#9fd4e4;margin-bottom:14px}
+.hero h1{font-size:31px;line-height:1.4}
+.hero .sub{margin-top:12px;color:#c6e4ee;font-size:14.5px;max-width:780px}
+.hero .facts{display:flex;gap:30px;margin-top:26px;font-size:12.5px;color:#a9d3e0;flex-wrap:wrap}
+.hero .facts b{display:block;color:#eef9fc;font-size:17px;font-family:var(--mono)}
+.sec{padding:44px 0 6px}
+.sec h2{font-size:21px;margin-bottom:6px}
+.sec .d{color:var(--ink3);font-size:13px;margin-bottom:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 26px;margin-bottom:16px}
+.card h3{font-size:16px;margin-bottom:8px}
+.card p{color:var(--ink2);font-size:14px}
+.card p + p{margin-top:8px}
+.card b{color:var(--ink)}
+ul.tick{margin:6px 0 0 18px;color:var(--ink2);font-size:14px}
+ul.tick li{margin:7px 0}
+ul.tick b{color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;margin-top:10px}
+th{background:#f2f5fa;text-align:left;padding:8px 12px;border:1px solid var(--line);color:var(--ink2);font-weight:600;white-space:nowrap}
+td{padding:8px 12px;border:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+td:first-child{color:var(--ink)}
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 4px}
+.fnode{background:#fff;border:1.5px solid var(--teal);border-radius:8px;padding:5px 14px;font-weight:600;font-size:13px;color:var(--teal-d)}
+.farr{color:#b3bdcf;font-weight:700}
+.deliv{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.deliv a{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.deliv a:hover{text-decoration:none;border-color:#9fd0de;box-shadow:0 8px 20px rgba(16,32,60,.07)}
+.deliv .t{font-size:14px;font-weight:600}
+.deliv .s{font-size:12.5px;color:var(--ink3);margin-top:4px}
+.callout{background:var(--teal-bg);border:1px solid #bfe3ed;border-radius:10px;padding:14px 18px;font-size:13.5px;color:var(--ink2);margin:14px 0}
+.callout b{color:var(--teal-d)}
+.foot{margin-top:52px;border-top:1px solid var(--line);background:#fff;padding:28px 0 44px}
+.foot p{font-size:12.5px;color:var(--ink3)}
+@media (max-width:760px){.deliv{grid-template-columns:1fr}.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="back" href="../index.html">← 返回作品集首页</a>
+  <a class="back" href="../assets/crm/prd.html" target="_blank">直接查看 PRD ↗</a>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <div class="crumb">项目二 · B 端核心链路逆向设计</div>
+  <h1>CRM 客户与商机管理后台 · 逆向产品设计</h1>
+  <p class="sub">以纷享销客、销售易两款主流 CRM SaaS 为参照对象，逆向拆解「线索 → 商机 → 合同 → 回款」客户管理主链路，跑通业务建模 → 数据权限 → 原型 → PRD → 指标方案的 B 端产品完整交付流程。</p>
+  <div class="facts">
+    <span><b>4 套</b>交付物（建模图 / 原型 / PRD / 权限矩阵）</span>
+    <span><b>28 项</b>角色 × 数据范围 × 操作项矩阵</span>
+    <span><b>10 页</b>高保真原型</span>
+    <span><b>10 项</b>全生命周期指标</span>
+  </div>
+</div></section>
+
+<div class="wrap">
+
+  <section class="sec">
+    <h2>为什么做逆向设计</h2>
+    <div class="card">
+      <p>CRM 是 B 端产品里最成熟、也最能体现「流程 + 权限 + 指标」基本功的品类。与其凭空设计，不如把成熟产品的主链路逐节点还原，理解每个规则<b>为什么存在</b>，再做出自己的取舍——这比照着竞品抄功能更能检验产品设计能力。</p>
+      <p style="margin-top:8px">方法：把纷享销客与销售易按同一框架（流程体系 / 公海规则 / 商机管理 / 权限体系）横向拆解，逐项记录两者做法的差异，再决定本项目取谁、舍谁、为什么。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>逆向拆解的结论与取舍</h2>
+    <div class="card">
+      <table>
+        <tr><th style="width:120px">维度</th><th>纷享销客</th><th>销售易</th><th>本项目取舍</th></tr>
+        <tr><td>流程体系</td><td>连接型 CRM：微信沟通记录同步、外勤签到与拜访报告完善</td><td>LTC 端到端：MTL→LTO→CPQ→OTC 四环节打通</td><td>采用<b>销售易 LTC 主干</b>，吸收纷享的<b>外勤跟进与公海机制</b></td></tr>
+        <tr><td>公海 / 线索池</td><td>规则丰富：超期掉落、冷却期、领取上限</td><td>偏企业自定义，配置门槛高</td><td><b>预置 7 天 / 30 天掉落 + 15 天冷却</b>，规则可配</td></tr>
+        <tr><td>商机管理</td><td>阶段自定义 + 门禁校验</td><td>阶段赢单率与预测联动</td><td><b>阶段门禁 + 赢单率加权预测</b>两者都要</td></tr>
+        <tr><td>权限体系</td><td>组织树 + 数据范围 + 字段级</td><td>角色权限矩阵清晰，审计完善</td><td>三级角色 + 数据范围 + <b>字段级脱敏</b> + 审计日志</td></tr>
+      </table>
+      <p style="margin-top:12px">由此沉淀四条设计原则：<b>先流程后功能</b>（所有页面挂在 LTC 主流程节点上，无孤立功能）、<b>录入减负</b>（查重前置、线索 4 个必填字段即可创建）、<b>过程数据资产化</b>（每次跟进自动沉淀时间线）、<b>权限即数据</b>（数据范围在 SQL 层过滤，而非前端隐藏）。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>主流程与状态流转</h2>
+    <div class="card">
+      <div class="flow">
+        <span class="fnode">线索获取与查重</span><span class="farr">→</span>
+        <span class="fnode">分配 / 领取</span><span class="farr">→</span>
+        <span class="fnode">跟进验证</span><span class="farr">→</span>
+        <span class="fnode">转化（客户 + 商机）</span><span class="farr">→</span>
+        <span class="fnode">阶段推进（门禁）</span><span class="farr">→</span>
+        <span class="fnode">报价 / 合同审批</span><span class="farr">→</span>
+        <span class="fnode">签订生成回款计划</span><span class="farr">→</span>
+        <span class="fnode">回款核销</span>
+      </div>
+      <p style="margin-top:10px">四个对象各有严格的状态机，几条关键规则：</p>
+      <ul class="tick">
+        <li><b>线索</b>：24h 首访红线；7 天未跟进自动掉公海；无效为终态且必填原因；转化在事务内原子生成客户 + 商机；</li>
+        <li><b>商机</b>：五阶段各带赢率（15% / 30% / 45% / 75%），推进需过门禁校验（POC、报价单等），反向回退需审批，停留超时自动告警，加权预测 = 金额 × 赢率；</li>
+        <li><b>合同</b>：必须关联赢单商机；审批通过后金额锁定，变更走子流程留痕；</li>
+        <li><b>回款</b>：财务确认到账后按「先到期先核销」自动核销，核销不可改、红冲需财务权限，全部核销后合同自动完成。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>数据权限：销售 / 销售主管 / 区域总监</h2>
+    <div class="card">
+      <p>权限判定 = f(功能权限[角色], 数据范围[角色], 字段权限[角色 × 字段])。数据范围在<b>数据访问层（SQL）过滤</b>，而非前端隐藏；全部越权尝试写入审计日志。数据范围口径：SELF（本人 + 协作人）/ TEAM（部门子树）/ REGION（区域组织树全节点）/ POOL（公海，领取受冷却期与上限约束）。</p>
+      <table>
+        <tr><th>操作项</th><th>销售 · 本人</th><th>销售主管 · 本团队</th><th>区域总监 · 本区域</th><th>技术控制点</th></tr>
+        <tr><td>查看列表 / 详情</td><td>本人 + 协作</td><td>本团队</td><td>本区域</td><td>SQL 行级过滤</td></tr>
+        <tr><td>查看客户手机号</td><td>脱敏</td><td>明文</td><td>脱敏</td><td>字段级权限</td></tr>
+        <tr><td>编辑他人记录</td><td>不可</td><td>可（留痕）</td><td>只读</td><td>审计日志</td></tr>
+        <tr><td>商机阶段回退</td><td>本人推进</td><td>回退需审批</td><td>—</td><td>阶段门禁 + 审批流</td></tr>
+        <tr><td>折扣审批</td><td>发起人</td><td>95–90 折</td><td>&lt;90 折 / &gt;¥100 万终审</td><td>分档审批流引擎</td></tr>
+        <tr><td>删除</td><td>不可</td><td>→ 回收站 30 天</td><td>不可</td><td>回收站可恢复</td></tr>
+        <tr><td>导入 / 导出</td><td>申请制</td><td>本团队</td><td>本区域</td><td>水印 + 日志留存</td></tr>
+      </table>
+      <p style="margin-top:12px">完整 28 行矩阵见交付物《CRM 权限矩阵.xlsx》（含角色定义、数据范围 SQL 口径、审批分档规则三个工作表）。另配协作机制（owner 邀请协作人）、撞单仲裁（区域总监裁决，记录不可撤销）、离职交接（一键转移并立即回收数据范围）三条特殊规则。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>客户全生命周期指标方案</h2>
+    <div class="d">按生命周期分四层共 10 项指标，每项含口径、公式、健康阈值与责任角色，取其中三个重点说明落地深度。</div>
+    <div class="card">
+      <div class="flow">
+        <span class="fnode">获客层 · 线索</span><span class="farr">→</span>
+        <span class="fnode">转化层 · 商机</span><span class="farr">→</span>
+        <span class="fnode">履约层 · 合同</span><span class="farr">→</span>
+        <span class="fnode">回款层 · 资金</span>
+      </div>
+      <ul class="tick">
+        <li><b>线索转化率（≥20%）</b>：分子只算状态变更为「已转化」的线索，分母剔除「无效且 24h 内判定」的部分，避免垃圾数据稀释；支持渠道 → 行业 → 区域 → 个人下钻，单渠道连续 2 周 &lt;10% 自动通知市场负责人；</li>
+        <li><b>赢单周期（P50 ≤ 45 天）</b>：同时输出 P50 / P90 双分位值避免均值被极端值扭曲；与阶段停留阈值联动，超 P75 分位自动标记黄色风险；季度输出「周期 vs 赢单率」散点识别高耗低效商机模式；</li>
+        <li><b>跟进及时率（≥92%）</b>：系统按三条规则生成「应跟进」任务（新线索 24h / 在谈商机 7 天 / 成交客户 30 天），截止前完成有效跟进才计数；个人连续 2 周 &lt;80% 进主管重点关注名单；跟进记录需含 10 字以上摘要或外勤签到凭证，纯点击不计——防作弊写进了口径。</li>
+      </ul>
+      <p style="margin-top:10px">计算链路：业务库 binlog → 数仓 ODS/DWD（事件表：clue_created / followup_done / stage_changed / payment_verified）→ DWS 日汇总 → T+1 06:00 批算 → 看板与预警。指标可追溯到事件表，且角色的数据范围同样作用于指标。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>交付物</h2>
+    <div class="deliv">
+      <a href="../assets/crm/models.html" target="_blank"><div class="t">业务建模图集（3 套）</div><div class="s">跨职能泳道流程图 / 四对象状态流转图（含门禁与公海规则）/ 系统信息架构图</div></a>
+      <a href="../assets/crm/prototype.html" target="_blank"><div class="t">高保真原型（10 页）</div><div class="s">工作台 / 线索 / 客户 / 商机列表·看板·详情 / 合同 / 回款 / 权限配置，支持三种角色切换联动数据范围</div></a>
+      <a href="../assets/crm/prd.html" target="_blank"><div class="t">标准化 PRD（V1.0 · 9 章）</div><div class="s">竞品逆向拆解、FR-101~602 需求表（含验收要点）、权限模型、指标方案、非功能需求、里程碑与风险</div></a>
+      <a href="../assets/crm/permissions.xlsx" target="_blank"><div class="t">权限矩阵 Excel（28 项）</div><div class="s">操作项 × 三角色红绿标色 + 角色定义 / SQL 口径 / 审批分档规则工作表</div></a>
+    </div>
+    <div class="callout"><b>边界声明：</b>本项目为逆向设计练习，未上线运行；竞品行为来自公开资料与试用体验的桌面调研，指标阈值为行业通识参考值。设计方法（链路拆解框架、权限模型公式、指标口径写法）可直接迁移到真实 B 端项目。</div>
+  </section>
+
+</div>
+
+<footer class="foot"><div class="wrap">
+  <p>王泳雯 · B 端产品作品集 · <a href="../index.html">返回首页</a></p>
+</div></footer>
+
+</body>
+</html>

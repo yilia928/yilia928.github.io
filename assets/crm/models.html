@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM 业务建模图 · 业务流程图 / 状态流转图 / 信息架构图</title>
+<style>
+:root{
+  --navy:#0e1b30; --blue:#2b5cff; --blue-bg:#eef3ff; --blue-dark:#1e46c8;
+  --amber:#f59e0b; --amber-bg:#fff7e8; --green:#16a34a; --green-bg:#e9f9ef;
+  --red:#dc2626; --red-bg:#fdecec; --cyan:#0891b2; --cyan-bg:#e6f7fb;
+  --violet:#7c3aed; --violet-bg:#f3ecfe; --gray:#8a94ab; --gray-bg:#f0f2f7;
+  --ink:#17233a; --ink-2:#44506a; --ink-3:#8a94ab; --line:#e4e8f0; --bg:#f4f6fa; --card:#fff;
+  --mono:"JetBrains Mono","Cascadia Mono",Consolas,monospace;
+  --sans:"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:13px;line-height:1.6;padding:28px 32px 60px}
+h1{font-size:24px;letter-spacing:-.02em;margin-bottom:4px}
+.sub{color:var(--ink-3);font-size:13px;margin-bottom:28px}
+.toc{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
+.toc a{color:var(--blue-dark);background:var(--blue-bg);border:1px solid #c8d8ff;padding:6px 16px;border-radius:20px;text-decoration:none;font-size:13px;font-weight:600}
+.dg-title{font-size:19px;font-weight:700;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+.dg-title .no{font-family:var(--mono);background:var(--navy);color:#fff;border-radius:6px;padding:2px 10px;font-size:13px}
+.dg-desc{color:var(--ink-2);font-size:13px;margin-bottom:18px;max-width:900px}
+.dg-block{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 28px;margin-bottom:40px;box-shadow:0 1px 3px rgba(23,35,58,.05)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px dashed var(--line);font-size:12px;color:var(--ink-2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* ===== 流程图：泳道 ===== */
+.lane-wrap{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.lane{display:flex;align-items:stretch;border-bottom:1px solid var(--line);min-height:96px}
+.lane:last-child{border-bottom:none}
+.lane-name{width:130px;flex:none;background:#f8fafc;border-right:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13.5px;color:var(--ink-2);writing-mode:horizontal-tb;text-align:center;padding:10px}
+.lane-name small{display:block;font-weight:400;font-size:11px;color:var(--ink-3)}
+.lane-body{flex:1;display:flex;align-items:center;gap:0;padding:14px 18px;flex-wrap:wrap;row-gap:26px}
+.fnode{background:#fff;border:1.5px solid var(--blue);border-radius:8px;padding:7px 13px;font-size:12.5px;text-align:center;white-space:nowrap;box-shadow:0 1px 2px rgba(43,92,255,.08)}
+.fnode.sys{border-style:dashed;border-color:var(--cyan);color:var(--cyan);background:var(--cyan-bg)}
+.fnode.decision{border-color:var(--amber);background:var(--amber-bg);border-radius:16px;font-weight:600;color:#92600a}
+.fnode.end{border-color:var(--green);background:var(--green-bg);color:var(--green);font-weight:600}
+.fnode.bad{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.farrow{display:flex;align-items:center;color:#b3bdcf;margin:0 6px;flex:none}
+.farrow .lbl{font-size:10.5px;color:var(--ink-3);margin-left:3px;white-space:nowrap}
+.farrow svg{display:block}
+.vdrop{width:100%;display:flex;justify-content:flex-end;padding-right:40px;height:0;position:relative}
+.lane-note{font-size:11px;color:var(--ink-3);margin:4px 0 0 142px}
+
+/* ===== 状态机 ===== */
+.sm-title{font-weight:700;font-size:14px;margin:0 0 14px;display:flex;align-items:center;gap:8px}
+.sm-title .dot{width:10px;height:10px;border-radius:3px}
+.sm-row{display:flex;align-items:center;flex-wrap:wrap;row-gap:30px;margin-bottom:26px;padding:18px;background:#fafbfd;border:1px solid var(--line-2);border-radius:10px}
+.snode{padding:6px 14px;border-radius:18px;font-size:12.5px;border:1.5px solid;white-space:nowrap;position:relative;font-weight:600}
+.snode.start{border-color:var(--ink-3);background:var(--gray-bg);color:var(--ink-2);border-radius:6px}
+.snode.mid{border-color:var(--blue);background:var(--blue-bg);color:var(--blue-dark)}
+.snode.ok{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.snode.bad{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.snode.warn{border-color:var(--amber);background:var(--amber-bg);color:#92600a}
+.sarrow{display:flex;flex-direction:column;align-items:center;margin:0 4px;min-width:56px}
+.sarrow .lbl{font-size:10.5px;color:var(--ink-2);background:#fff;border:1px solid var(--line);border-radius:4px;padding:0 6px;margin:2px 0;white-space:nowrap}
+.sarrow .lbl.auto{color:var(--cyan);border-color:#bfe6ef;background:var(--cyan-bg)}
+.sarrow .lbl.rule{color:#92600a;border-color:#f2ddb8;background:var(--amber-bg)}
+.branch{display:flex;flex-direction:column;gap:8px;margin-left:2px}
+.branch .brow{display:flex;align-items:center}
+.sm-rules{margin-top:10px;font-size:12px;color:var(--ink-2);background:var(--blue-bg);border:1px solid #c8d8ff;border-radius:8px;padding:10px 14px}
+.sm-rules b{color:var(--blue-dark)}
+.sm-rules li{margin-left:18px;margin-top:3px}
+
+/* ===== 信息架构树 ===== */
+.ia{overflow-x:auto;padding:6px 0}
+.ia-root{display:flex;justify-content:center;margin-bottom:26px}
+.ia-root .box{background:var(--navy);color:#fff;font-weight:700;padding:10px 34px;border-radius:9px;font-size:15px;letter-spacing:1px;box-shadow:0 6px 16px rgba(14,27,48,.25)}
+.ia-l1{display:flex;justify-content:center;gap:0;margin-bottom:30px;flex-wrap:wrap}
+.ia-mod{display:flex;flex-direction:column;align-items:center}
+.ia-mod .box{background:var(--blue);color:#fff;font-weight:700;padding:8px 22px;border-radius:8px;font-size:13.5px;box-shadow:0 4px 10px rgba(43,92,255,.25)}
+.ia-mod .stems{height:18px;border-left:2px solid #c9d1e0;border-right:2px solid #c9d1e0;width:60%}
+.ia-mod .leaf{background:#fff;border:1.5px solid var(--line);border-radius:7px;padding:5px 12px;font-size:12px;color:var(--ink-2);margin-top:6px;text-align:center;white-space:nowrap}
+.ia-mod .leaf b{color:var(--ink)}
+.ia-mod .leaf .m{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);display:block}
+.ia-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.ia-col{border-top:3px solid var(--blue);background:#fafbfd;border-radius:0 0 9px 9px;padding:12px}
+.ia-col:nth-child(2){border-color:#0891b2}.ia-col:nth-child(3){border-color:#16a34a}.ia-col:nth-child(4){border-color:#f59e0b}.ia-col:nth-child(5){border-color:#7c3aed}
+.ia-col h4{font-size:13.5px;margin-bottom:8px}
+.ia-col ul{list-style:none}
+.ia-col li{font-size:12px;color:var(--ink-2);padding:4px 0 4px 14px;position:relative;border-bottom:1px dashed var(--line-2)}
+.ia-col li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:2px;background:var(--line)}
+.ia-col li b{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<h1>CRM 客户与商机管理后台 · 业务建模图集</h1>
+<div class="sub">参照纷享销客 / 销售易逆向拆解 ｜ 图 1 业务流程图（泳道）· 图 2 状态流转图 · 图 3 信息架构图 ｜ 2026-09-17</div>
+<div class="toc">
+  <a href="#dg1">图 1 · 主业务流程图（线索→商机→合同→回款）</a>
+  <a href="#dg2">图 2 · 核心对象状态流转图</a>
+  <a href="#dg3">图 3 · 系统信息架构图</a>
+</div>
+
+<!-- ===================== 图1 泳道流程 ===================== -->
+<section class="dg-block" id="dg1">
+  <div class="dg-title"><span class="no">图 1</span>主业务流程图（跨职能泳道）</div>
+  <div class="dg-desc">主线：<b>线索 → 商机 → 合同 → 回款</b>。泳道按角色划分（市场/线索运营、销售、销售主管、财务），虚线节点为系统自动动作，菱形为业务判断点。右侧标注各环节的 CRM 系统支撑能力。</div>
+  <div class="lane-wrap">
+    <div class="lane">
+      <div class="lane-name">市场 / 线索运营<small>Marketing</small></div>
+      <div class="lane-body">
+        <div class="fnode">多渠道获客<br><small style="color:var(--ink-3)">活动/官网/转介绍/外呼</small></div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="fnode sys">系统：线索录入 + 查重<br><small>手机号/公司名 15 天去重</small></div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="fnode">线索池分配<br><small style="color:var(--ink-3)">规则自动 / 主管手动</small></div>
+        <div class="farrow"><svg width="52" height="12"><path d="M0 6h44m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg><span class="lbl">移交销售</span></div>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-name">销售<small>Sales Rep</small></div>
+      <div class="lane-body">
+        <div class="fnode">接收线索<br><small style="color:var(--ink-3)">24h 首访红线</small></div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="fnode decision">线索有效性判断</div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg><span class="lbl">无效→</span></div>
+        <div class="fnode bad">标记无效 / 掉落公海</div>
+        <div style="width:100%;display:flex;align-items:center;gap:0;margin-top:8px">
+          <span class="farrow" style="margin:0"><span class="lbl">有效</span></span>
+          <svg width="34" height="12" style="margin:0 6px"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg>
+          <div class="fnode">转化为客户 + 商机</div>
+          <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+          <div class="fnode">商机推进（阶段门禁）<br><small style="color:var(--ink-3)">初步接触→需求确认→方案报价→商务谈判</small></div>
+          <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+          <div class="fnode">提交报价 / 合同草案</div>
+          <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg><span class="lbl">提交审批→</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-name">销售主管<small>Sales Manager</small></div>
+      <div class="lane-body">
+        <div class="fnode decision">阶段推进 / 折扣审核<br><small style="color:#92600a">≤95折权限内审批</small></div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="fnode decision">合同初审</div>
+        <div class="farrow"><svg width="40" height="12"><path d="M0 6h32m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg><span class="lbl">大额加签总监</span></div>
+        <div class="fnode">赢单确认 → 关单</div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="fnode">生成回款计划</div>
+      </div>
+    </div>
+    <div class="lane">
+      <div class="lane-name">财务<small>Finance</small></div>
+      <div class="lane-body">
+        <div class="fnode decision">合同终审<br><small style="color:#92600a">金额/账期/法务</small></div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="fnode end">合同签订生效</div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="fnode">到账确认 → 自动核销</div>
+        <div class="farrow"><svg width="34" height="12"><path d="M0 6h26m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="fnode end">回款完成 · 闭环</div>
+        <div class="farrow"><svg width="40" height="12"><path d="M0 6h32m0 0-6-4m6 4-6 4" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg><span class="lbl">复购/增购</span></div>
+        <div class="fnode" style="border-style:dashed">回到商机（LTV 经营）</div>
+      </div>
+    </div>
+  </div>
+  <div class="legend">
+    <span><i style="background:#fff;border:1.5px solid var(--blue)"></i>业务动作</span>
+    <span><i style="background:var(--cyan-bg);border:1.5px dashed var(--cyan)"></i>系统自动动作</span>
+    <span><i style="background:var(--amber-bg);border:1.5px solid var(--amber);border-radius:50%"></i>判断/审批点</span>
+    <span><i style="background:var(--green-bg);border:1.5px solid var(--green)"></i>里程碑</span>
+    <span><i style="background:var(--red-bg);border:1.5px solid var(--red)"></i>负向分支</span>
+  </div>
+  <div class="lane-note">说明：任一环节逾期未跟进将触发「公海回收」机制（线索 7 天 / 客户 30 天），保证资源流动；输单商机必须填写输单原因用于复盘。</div>
+</section>
+
+<!-- ===================== 图2 状态机 ===================== -->
+<section class="dg-block" id="dg2">
+  <div class="dg-title"><span class="no">图 2</span>核心对象状态流转图（线索 / 商机 / 合同 / 回款）</div>
+  <div class="dg-desc">四个核心对象的状态机与流转条件。灰色＝初始态，蓝色＝中间态，绿色＝终态（成功），红色＝终态（失败/终止），橙色＝告警/回收态。标签注明触发条件。</div>
+
+  <div class="sm-title"><span class="dot" style="background:var(--blue)"></span>2.1 线索（Lead）状态机</div>
+  <div class="sm-row">
+    <span class="snode start">● 创建（来源渠道）</span>
+    <div class="sarrow"><span class="lbl auto">查重通过</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">待分配</span>
+    <div class="sarrow"><span class="lbl">分配/领取</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">跟进中</span>
+    <div class="branch">
+      <div class="brow"><div class="sarrow"><span class="lbl">有效（≥2条跟进+意向）</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode ok">已转化 → 生成客户+商机</span></div>
+      <div class="brow"><div class="sarrow"><span class="lbl">判定无效</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode bad">无效（原因必填）</span></div>
+      <div class="brow"><div class="sarrow"><span class="lbl rule">超 7 天未跟进</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode warn">公海（冷却期 15 天）</span></div>
+    </div>
+  </div>
+  <div class="sm-rules"><b>流转规则：</b>
+    <li>公海线索可被任何销售领取，领取后重新进入「跟进中」，原负责人收到通知；</li>
+    <li>「无效」为终态，需选择原因（空号/非目标客户/竞对已合作等），不可逆；</li>
+    <li>转化动作原子性：客户 + 商机 + 转化记录一次事务生成，线索状态同步变更。</li>
+  </div>
+
+  <div class="sm-title" style="margin-top:28px"><span class="dot" style="background:#0891b2"></span>2.2 商机（Opportunity）阶段机</div>
+  <div class="sm-row">
+    <span class="snode start">● 创建（线索转化/手动）</span>
+    <div class="sarrow"><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">初步接触 <small style="color:var(--ink-3);font-weight:400">15%</small></span>
+    <div class="sarrow"><span class="lbl">需求明确</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">需求确认 <small style="color:var(--ink-3);font-weight:400">30%</small></span>
+    <div class="sarrow"><span class="lbl rule">门禁：POC/方案评审通过</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">方案报价 <small style="color:var(--ink-3);font-weight:400">45%</small></span>
+    <div class="sarrow"><span class="lbl rule">门禁：报价单上传</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">商务谈判 <small style="color:var(--ink-3);font-weight:400">75%</small></span>
+    <div class="branch">
+      <div class="brow"><div class="sarrow"><span class="lbl">签约</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode ok">赢单 → 生成合同</span></div>
+      <div class="brow"><div class="sarrow"><span class="lbl">任一阶段可</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode bad">输单（原因+竞对必填）</span></div>
+    </div>
+  </div>
+  <div class="sm-rules"><b>流转规则：</b>
+    <li>阶段只能前进或关单，<b>反向回退需主管审批</b>（如商务谈判→方案报价）；</li>
+    <li>每阶段设「门禁校验」与「停留时长阈值」（商务谈判 7 天），超时自动提醒主管；</li>
+    <li>输单可由主管执行「重启」回到初步接触，需补充新的推进策略；</li>
+    <li>加权预测金额 = 商机金额 × 阶段赢率，随阶段变更自动重算。</li>
+  </div>
+
+  <div class="sm-title" style="margin-top:28px"><span class="dot" style="background:var(--violet)"></span>2.3 合同（Contract）状态机</div>
+  <div class="sm-row">
+    <span class="snode start">● 起草（关联商机）</span>
+    <div class="sarrow"><span class="lbl">提交</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">审批中 <small style="color:var(--ink-3);font-weight:400">主管→法务→财务</small></span>
+    <div class="branch">
+      <div class="brow"><div class="sarrow"><span class="lbl">通过</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode ok">已签订 → 执行中</span></div>
+      <div class="brow"><div class="sarrow"><span class="lbl">驳回</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode warn">已驳回（可改后重提）</span></div>
+    </div>
+    <div class="sarrow"><span class="lbl auto">履约期满</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode ok">已完成 / 归档</span>
+    <div class="sarrow"><span class="lbl rule">任一阶段可作废（审批）</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode bad">已作废</span>
+  </div>
+  <div class="sm-rules"><b>流转规则：</b>
+    <li>合同必须关联<b>「商务谈判或已赢单」</b>商机；审批通过后金额/主体字段锁定；</li>
+    <li>执行中变更走「合同变更」子流程，留痕版本对比；作废需审批并回收相关回款计划。</li>
+  </div>
+
+  <div class="sm-title" style="margin-top:28px"><span class="dot" style="background:var(--amber)"></span>2.4 回款（Payment）状态机</div>
+  <div class="sm-row">
+    <span class="snode start">● 回款计划生成（合同签订后）</span>
+    <div class="sarrow"><span class="lbl">到期</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">待回款</span>
+    <div class="branch">
+      <div class="brow"><div class="sarrow"><span class="lbl">部分到账</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode warn">部分回款</span></div>
+      <div class="brow"><div class="sarrow"><span class="lbl auto">超期 N 天未到账</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div><span class="snode bad">逾期（触发催收任务）</span></div>
+    </div>
+    <div class="sarrow"><span class="lbl">财务确认到账</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode mid">已回款（待核销）</span>
+    <div class="sarrow"><span class="lbl auto">自动核销</span><svg width="14" height="26"><path d="M7 0v18m0 0-4-5m4 5 4-5" stroke="#b3bdcf" stroke-width="1.6" fill="none"/></svg></div>
+    <span class="snode ok">已核销 → 回写合同进度/客户成交额</span>
+  </div>
+  <div class="sm-rules"><b>流转规则：</b>
+    <li>核销按「先到期先核销」匹配回款计划；核销记录不可修改，红冲需财务权限；</li>
+    <li>全部计划核销完成后，合同自动流转「已完成」，商机累计成交金额更新。</li>
+  </div>
+</section>
+
+<!-- ===================== 图3 信息架构 ===================== -->
+<section class="dg-block" id="dg3">
+  <div class="dg-title"><span class="no">图 3</span>系统信息架构图（IA）</div>
+  <div class="dg-desc">CRM 后台一级/二级导航结构，按「工作台 → 客户管理 → 商机与交易 → 数据分析 → 系统管理」五层组织；关键二级页面标注原型覆盖情况（详见高保真原型）。</div>
+  <div class="ia-root"><div class="box">智销云 CRM 管理后台</div></div>
+  <div class="ia-grid">
+    <div class="ia-col">
+      <h4>① 工作台</h4>
+      <ul>
+        <li><b>销售工作台</b>：待办 / 漏斗 / 目标完成度</li>
+        <li><b>主管驾驶舱</b>：团队漏斗 / 红线预警</li>
+        <li><b>区域经营视图</b>：汇总看板</li>
+      </ul>
+    </div>
+    <div class="ia-col">
+      <h4>② 客户管理</h4>
+      <ul>
+        <li><b>线索</b>：我的线索 / 线索池 / 公海 ★</li>
+        <li><b>线索详情</b>：跟进时间线 / 转化检查 ★</li>
+        <li><b>客户</b>：360° 档案 / 客户公海</li>
+        <li><b>联系人</b>：决策链管理</li>
+      </ul>
+    </div>
+    <div class="ia-col">
+      <h4>③ 商机与交易</h4>
+      <ul>
+        <li><b>商机</b>：列表 / 看板 / 详情 ★</li>
+        <li><b>报价单</b>：CPQ 版本管理</li>
+        <li><b>合同</b>：审批流 / 变更 ★</li>
+        <li><b>回款</b>：计划 / 登记 / 核销 ★</li>
+      </ul>
+    </div>
+    <div class="ia-col">
+      <h4>④ 数据分析</h4>
+      <ul>
+        <li><b>销售简报</b>：日报 / 周报自动生成</li>
+        <li><b>漏斗分析</b>：阶段转化率</li>
+        <li><b>指标看板</b>：线索转化率 / 赢单周期 / 跟进及时率</li>
+        <li><b>自定义报表</b>：拖拽配置</li>
+      </ul>
+    </div>
+    <div class="ia-col">
+      <h4>⑤ 系统管理</h4>
+      <ul>
+        <li><b>组织与角色</b>：三级角色体系 ★</li>
+        <li><b>数据权限</b>：本人/团队/区域 ★</li>
+        <li><b>审批流</b>：折扣 / 合同分档</li>
+        <li><b>公海规则 / 回收站</b></li>
+        <li><b>自定义字段</b></li>
+      </ul>
+    </div>
+  </div>
+  <div class="legend" style="margin-top:16px"><span>★ ＝ 本项目高保真原型已覆盖页面（共 10 页，见《高保真原型_CRM后台.html》）</span></div>
+</section>
+
+</body>
+</html>
